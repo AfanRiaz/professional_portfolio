@@ -118,106 +118,110 @@ class ReusableContainer extends StatelessWidget {
                 /// ============================
                 /// 📦 MAIN CONTENT
                 /// ============================
-                Padding(
-                  padding: EdgeInsets.all(padding),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
 
-                  child: SizedBox(
-                    width: double.infinity,
+                    child: SizedBox(
+                      width: double.infinity,
 
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
 
-                      children: [
-                        /// ICON
-                        MouseRegion(
-                          onEnter: (_) {
-                            containerProvider.setIconHovered(true);
-                          },
-                          onExit: (_) {
-                            containerProvider.setIconHovered(false);
-                          },
-                          cursor: SystemMouseCursors.click,
+                        children: [
+                          /// ICON
+                          MouseRegion(
+                            onEnter: (_) {
+                              containerProvider.setIconHovered(true);
+                            },
+                            onExit: (_) {
+                              containerProvider.setIconHovered(false);
+                            },
+                            cursor: SystemMouseCursors.click,
 
-                          child: Container(
-                            height: iconSize,
-                            width: iconSize,
-                            alignment: Alignment.center,
+                            child: Container(
+                              height: iconSize,
+                              width: iconSize,
+                              alignment: Alignment.center,
 
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(
-                                255,
-                                178,
-                                178,
-                                255,
-                              ).withAlpha(50),
-                              shape: BoxShape.circle,
-                            ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(
+                                  255,
+                                  178,
+                                  178,
+                                  255,
+                                ).withAlpha(50),
+                                shape: BoxShape.circle,
+                              ),
 
-                            child: AnimatedScale(
-                              scale: containerProvider.isIconHovered ? 1.2 : 1.0,
-                              duration: const Duration(milliseconds: 200),
-                              curve: Curves.easeOutCubic,
-
-                              child: TweenAnimationBuilder<Color?>(
+                              child: AnimatedScale(
+                                scale: containerProvider.isIconHovered ? 1.2 : 1.0,
                                 duration: const Duration(milliseconds: 200),
-                                tween: ColorTween(
-                                  end: containerProvider.isIconHovered
-                                      ? Colors.white
-                                      : const Color.fromARGB(255, 169, 181, 223),
+                                curve: Curves.easeOutCubic,
+
+                                child: TweenAnimationBuilder<Color?>(
+                                  duration: const Duration(milliseconds: 200),
+                                  tween: ColorTween(
+                                    end: containerProvider.isIconHovered
+                                        ? Colors.white
+                                        : const Color.fromARGB(255, 169, 181, 223),
+                                  ),
+                                  builder: (context, color, child) {
+                                    return IconTheme(
+                                      data: IconThemeData(
+                                        color: color,
+                                        size: isVerySmall
+                                            ? 14
+                                            : isSmall
+                                            ? 16
+                                            : 20,
+                                      ),
+                                      child: icon,
+                                    );
+                                  },
                                 ),
-                                builder: (context, color, child) {
-                                  return IconTheme(
-                                    data: IconThemeData(
-                                      color: color,
-                                      size: isVerySmall
-                                          ? 14
-                                          : isSmall
-                                          ? 16
-                                          : 20,
-                                    ),
-                                    child: icon,
-                                  );
-                                },
                               ),
                             ),
                           ),
-                        ),
 
-                        SizedBox(
-                          height: isSmall ? 10 : 20,
-                        ),
-
-                        /// NUMBER
-                        Text(
-                          number,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(
-                            fontSize: responsiveNumberFont,
+                          SizedBox(
+                            height: isSmall ? 10 : 20,
                           ),
-                        ),
 
-                        SizedBox(
-                          height: isSmall ? 5 : 10,
-                        ),
-
-                        /// TITLE
-                        Text(
-                          text,
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          maxLines: isSmall ? 3 : 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            fontSize: textFontSize,
+                          /// NUMBER
+                          Text(
+                            number,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(
+                              fontSize: responsiveNumberFont,
+                            ),
                           ),
-                        ),
 
-                        const SizedBox(height: 12),
-                      ],
+                          SizedBox(
+                            height: isSmall ? 5 : 10,
+                          ),
+
+                          /// TITLE
+                          Flexible(
+                            child: Text(
+                              text,
+                              textAlign: TextAlign.center,
+                              softWrap: true,
+                              maxLines: isSmall ? 3 : 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontSize: textFontSize,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+                        ],
+                      ),
                     ),
                   ),
                 ),

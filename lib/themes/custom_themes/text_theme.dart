@@ -59,8 +59,9 @@ class AfanTextTheme {
     headlineLarge: TextStyle(
       fontSize: 28,
       color: lightHeadingColor,
-      fontFamily: GoogleFonts.montserrat().fontFamily,
-      fontWeight: FontWeight.w900,
+      fontFamily: GoogleFonts.archivoBlack().fontFamily,
+      fontWeight: FontWeight.w200,
+      letterSpacing: 3
     ),
 
     headlineMedium: TextStyle(
@@ -134,15 +135,16 @@ class AfanTextTheme {
     headlineLarge: TextStyle(
       fontSize: 28,
       color: darkHeadingColor,
-      fontFamily: GoogleFonts.montserrat().fontFamily,
+      fontFamily: GoogleFonts.archivoBlack().fontFamily,
       fontWeight: FontWeight.w900,
+      letterSpacing: 3
     ),
 
     headlineMedium: TextStyle(
       fontSize: 26,
       color: darkHeadingColor,
       fontFamily: GoogleFonts.montserrat().fontFamily,
-      fontWeight: FontWeight.w800,
+      fontWeight: FontWeight.w600,
     ),
 
     headlineSmall: TextStyle(

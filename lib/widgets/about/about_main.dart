@@ -56,40 +56,6 @@ class _AboutMainState extends State<AboutMain> {
       ),
     ];
 
-    final List<StatsModel> techStackData = [
-      StatsModel(
-        icon: Icon(
-          Icons.business_center,
-          size: 20,
-        ),
-        number: "1+",
-        title: "Year Experience",
-      ),
-      const StatsModel(
-        icon: FaIcon(
-          FontAwesomeIcons.diagramProject,
-          size: 20,
-        ),
-        number: "3+",
-        title: "Projects Delivered",
-      ),
-      const StatsModel(
-        icon: FaIcon(
-          FontAwesomeIcons.brain,
-          size: 20,
-        ),
-        number: "5+",
-        title: "Daily AI Tools",
-      ),
-      const StatsModel(
-        icon: FaIcon(
-          FontAwesomeIcons.code,
-          size: 20,
-        ),
-        number: "10+",
-        title: "Technologies Used",
-      ),
-    ];
     final size = MediaQuery.of(context).size;
 
     return Padding(
@@ -115,7 +81,8 @@ class _AboutMainState extends State<AboutMain> {
             text: "Passionate about building great products",
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
               fontSize: 40,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.normal,
+              letterSpacing: 0
             ),
           ),
 
@@ -140,8 +107,8 @@ class _AboutMainState extends State<AboutMain> {
               constraints.maxWidth >= 750 ? 4 : 2;
               final childAspectRatio =
               constraints.maxWidth >= 750
-                  ? 1.2
-                  : 1.1;
+                  ? 1.0
+                  : 0.9;
 
               return GridView.builder(
                 shrinkWrap: true,
@@ -331,127 +298,134 @@ class _AboutMainState extends State<AboutMain> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text.rich(
-                TextSpan(
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    height: 1.8,
-                    letterSpacing: 0.3,
-                  ),
-                  children: [
-                    // Paragraph 1
-                    TextSpan(
-                      text: "Passionate Mobile & Web Developer ",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8),
+                child: Text.rich(
+                  TextSpan(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      height: 1.8,
+                      letterSpacing: 0.3,
                     ),
-
-                    TextSpan(
-                      text:
-                      "building modern digital experiences with clean code, thoughtful design, and ",
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    children: [
+                      // Paragraph 1
+                      TextSpan(
+                        text: "Passionate Mobile & Web Developer ",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
 
-                    TextSpan(
-                      text: "AI-powered workflows.",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-
-                    TextSpan(
+                      TextSpan(
                         text:
-                        " I specialize in transforming ideas and complex UI/UX designs into responsive, polished, and maintainable applications.",
-                        style: Theme.of(context).textTheme.bodyMedium
-                    ),
-
-                    // Space between paragraphs
-                    const TextSpan(text: "\n\n"),
-
-                    // Paragraph 2
-                    TextSpan(
-                      text:
-                      "From pixel-perfect interfaces and smooth animations to ",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Color.fromARGB(255, 82, 94, 145),
+                        "building modern digital experiences with clean code, thoughtful design, and ",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        ),
                       ),
-                    ),
 
-                    TextSpan(
-                      text: "REST APIs",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w700,
+                      TextSpan(
+                        text: "AI-powered workflows.",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
 
-                    TextSpan(
-                      text: " and scalable application architecture, I focus on building products that ",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Color.fromARGB(255, 82, 94, 145),
+                      TextSpan(
+                          text:
+                          " I specialize in transforming ideas and complex UI/UX designs into responsive, polished, and maintainable applications.",
+                          style: Theme.of(context).textTheme.bodyMedium
                       ),
-                    ),
 
-                    TextSpan(
-                      text: "look great and work even better.",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w700,
+                      // Space between paragraphs
+                      const TextSpan(text: "\n\n"),
+
+                      // Paragraph 2
+                      TextSpan(
+                        text:
+                        "From pixel-perfect interfaces and smooth animations to ",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Color.fromARGB(255, 82, 94, 145),
+                        ),
                       ),
-                    ),
 
-                    // Space between paragraphs
-                    const TextSpan(text: "\n\n"),
-
-                    // Paragraph 3
-                    TextSpan(
-                      text:
-                      "By combining strong development skills with the ",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Color.fromARGB(255, 82, 94, 145),
+                      TextSpan(
+                        text: "REST APIs",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
 
-                    TextSpan(
-                      text: "daily use of AI tools",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w700,
+                      TextSpan(
+                        text: " and scalable application architecture, I focus on building products that ",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Color.fromARGB(255, 82, 94, 145),
+                        ),
                       ),
-                    ),
 
-                    TextSpan(
-                      text: " like ChatGPT, Claude, Gemini, and Grok, I work faster, solve problems smarter,"
-                          " and continuously improve the quality of every project I build.",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Color.fromARGB(255, 82, 94, 145),
+                      TextSpan(
+                        text: "look great and work even better.",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                  ],
+
+                      // Space between paragraphs
+                      const TextSpan(text: "\n\n"),
+
+                      // Paragraph 3
+                      TextSpan(
+                        text:
+                        "By combining strong development skills with the ",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Color.fromARGB(255, 82, 94, 145),
+                        ),
+                      ),
+
+                      TextSpan(
+                        text: "daily use of AI tools",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+
+                      TextSpan(
+                        text: " like ChatGPT, Claude, Gemini, and Grok, I work faster, solve problems smarter,"
+                            " and continuously improve the quality of every project I build.",
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Color.fromARGB(255, 82, 94, 145),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final width = (constraints.maxWidth - 20) / 2;
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final width = (constraints.maxWidth - 20) / 2;
 
-                  return Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
+                    return Wrap(
+                      spacing: 20,
+                      runSpacing: 20,
 
-                    children: infoStats.map((stat) {
-                      return SizedBox(
-                        width: width,
-                        height: 100,
+                      children: infoStats.map((stat) {
+                        return SizedBox(
+                          width: width,
+                          height: 100,
 
-                        child: ChangeNotifierProvider(
-                          create: (_) => ContainerProvider(),
-                          child: ReusableMyInfo(
-                              icon: stat.icon,
-                              heading: stat.title,
-                              content: stat.content)
-                        ),
-                      );
-                    }).toList(),
-                  );
-                },
+                          child: ChangeNotifierProvider(
+                            create: (_) => ContainerProvider(),
+                            child: ReusableMyInfo(
+                                icon: stat.icon,
+                                heading: stat.title,
+                                content: stat.content)
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               )
             ],
           ),
