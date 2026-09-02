@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:theming_app/provider/theme_provider.dart';
 import 'package:theming_app/widgets/about/about_main.dart';
 import 'package:theming_app/widgets/experience/experience_main.dart';
+import 'package:theming_app/widgets/get_app/get_app.dart';
 import 'package:theming_app/widgets/home/home_main.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey homeKey = GlobalKey();
   GlobalKey aboutKey = GlobalKey();
   GlobalKey experienceKey = GlobalKey();
+  GlobalKey getAppKey = GlobalKey();
 
   void scrollToSection(GlobalKey key) {
     Scrollable.ensureVisible(
@@ -31,11 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    scrollController.addListener(() {
-      setState(() {
-        showBorder = scrollController.offset > 0;
-      });
-    });
+
   }
   @override
   void dispose() {
@@ -72,18 +70,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   "AR",
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 42,
+                    fontSize: 30,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
 
                 Positioned(
-                  top: -8,
-                  right: -12,
+                  top: -3,
+                  right: -15,
                   child: Text(
                     "•",
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 35,
+                      fontSize: 25,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -98,6 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollToSection(experienceKey);
                   },
                   child: const Text("Experience"),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () {
+                    scrollToSection(getAppKey);
+                  },
+                  child: const Text("Get App"),
                 ),
               ),
 
@@ -156,9 +164,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           SliverToBoxAdapter(
+            key: getAppKey,
+            child: GetApp(),
+          ),
+
+          SliverToBoxAdapter(
             key: experienceKey,
             child: ExperienceMain(),
           ),
+
 
         ],
       ),

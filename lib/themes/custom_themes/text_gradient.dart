@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AfanGradientText extends StatelessWidget {
   final String text;
+  final bool darkRequired;
   final TextStyle? style;
   final TextAlign? textAlign;
 
@@ -10,6 +11,7 @@ class AfanGradientText extends StatelessWidget {
     required this.text,
     this.style,
     this.textAlign,
+    this.darkRequired = true,
   });
 
   @override
@@ -18,7 +20,7 @@ class AfanGradientText extends StatelessWidget {
         Theme.of(context).brightness == Brightness.dark;
 
     // 🌙 DARK MODE → WHITE TEXT
-    if (isDarkMode) {
+    if (isDarkMode && darkRequired == true) {
       return Text(
         text,
         textAlign: textAlign,
@@ -33,8 +35,8 @@ class AfanGradientText extends StatelessWidget {
       shaderCallback: (bounds) {
         return const LinearGradient(
           colors: [
-            Color(0xFF2D336B),
-            Color(0xFF9AA6D1),
+            Color(0xFF263B73),
+            Color(0xFFA1ADDB),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

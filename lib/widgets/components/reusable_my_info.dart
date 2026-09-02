@@ -17,7 +17,7 @@ class ReusableMyInfo extends StatelessWidget {
     required this.heading,
     required this.content,
     this.borderRadius = 15,
-    this.padding = const EdgeInsets.all(20),
+    this.padding = const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
     this.headingFontSize = 8,
   });
 
