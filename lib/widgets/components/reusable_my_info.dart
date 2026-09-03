@@ -54,15 +54,27 @@ class ReusableMyInfo extends StatelessWidget {
         ? const Color.fromARGB(255, 169, 181, 223)
         : const Color(0xFF5267D5);
 
-    return MouseRegion(
-      onEnter: (_) {
+    return GestureDetector(
+      onTapDown: (_) {
         containerProvider.setHovered(true);
+        containerProvider.setIconHovered(true);
       },
-      onExit: (_) {
+      onTapUp: (_) {
         containerProvider.setHovered(false);
+        containerProvider.setIconHovered(false);
       },
-
-      child: AnimatedContainer(
+      onTapCancel: () {
+        containerProvider.setHovered(false);
+        containerProvider.setIconHovered(false);
+      },
+      child: MouseRegion(
+        onEnter: (_) {
+          containerProvider.setHovered(true);
+        },
+        onExit: (_) {
+          containerProvider.setHovered(false);
+        },
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
 
@@ -176,6 +188,7 @@ class ReusableMyInfo extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
