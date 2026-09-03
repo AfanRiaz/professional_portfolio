@@ -174,15 +174,19 @@ class HoverIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hoverIconProvider = context.watch<HoverIconProvider>();
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) {
-        hoverIconProvider.setHovered(true);
-      },
-      onExit: (_) {
-        hoverIconProvider.setHovered(false);
-      },
-      child: AnimatedContainer(
+    return GestureDetector(
+      onTapDown: (_) => hoverIconProvider.setHovered(true),
+      onTapUp: (_) => hoverIconProvider.setHovered(false),
+      onTapCancel: () => hoverIconProvider.setHovered(false),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) {
+          hoverIconProvider.setHovered(true);
+        },
+        onExit: (_) {
+          hoverIconProvider.setHovered(false);
+        },
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         width: hoverIconProvider.isHovered ? 48 : 40,
@@ -205,6 +209,7 @@ class HoverIconButton extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

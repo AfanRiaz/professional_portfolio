@@ -54,12 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
 
             backgroundColor:
-            Theme.of(context).scaffoldBackgroundColor.withAlpha(70),
+            Theme.of(context).scaffoldBackgroundColor.withOpacity(0.27),
 
             shape: showBorder
                 ? Border(
               bottom: BorderSide(
-                color: Colors.blue.withValues(alpha: 0.25),
+                color: Colors.blue.withOpacity(0.25),
                 width: 1,
               ),
             )

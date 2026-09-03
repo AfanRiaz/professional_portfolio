@@ -1,359 +1,171 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:theming_app/themes/custom_themes/text_gradient.dart';
+import '../../provider/container_provider.dart';
+import '../components/tech_stack_container.dart';
 
 class GetApp extends StatelessWidget {
   const GetApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      color: isDarkMode ? const Color(0xFF0D1B3D) // Dark blue
-          : const Color(0xFFF0F5FF), // Very light blue
-      height: 1000,
-      width: double.infinity,
-      child: Center(
-        child: Column(
-          children: [
-            Text("Featured App",style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              letterSpacing: 3,
-              fontWeight: FontWeight.w900,
-              fontSize: 12
-            ),),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "My Flutter",
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontSize: 40,
-                      fontWeight: FontWeight.normal,
-                      letterSpacing: 2
-                    ),
-                  ),
-
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.baseline,
-                    baseline: TextBaseline.alphabetic,
-                    child: AfanGradientText(
-                      darkRequired: false,
-                      text: " Portfolio App",
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontSize: 40,
-                        fontWeight: FontWeight.normal
-                      ),
-                    ),
-                  ),
-                ]
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 180),
-              child: Center(child: Text("A premium multi-platform Flutter app connected to Supabase — browse projects, view certificates, download resume, and reach out with a smooth native experience.",textAlign: TextAlign.center,)),
-            ),
-            SizedBox(height: 20,),
-            TechStackSection()
-          ],
-        ),
-      )
-    );
-  }
-}
-
-
-
-class TechStackSection extends StatelessWidget {
-  const TechStackSection({super.key});
-
-  static const Color backgroundColor = Color(0xFF303557);
-  static const Color cardColor = Color(0xFF363B60);
-  static const Color borderColor = Color(0xFF464D78);
-  static const Color textColor = Color(0xFFD6D3D2);
-  static const Color mutedColor = Color(0xFF8E9ABD);
-  static const Color greenColor = Color(0xFF4BCB7A);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: backgroundColor,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 40,
-        vertical: 50,
-      ),
-      child: Column(
-        children: [
-          const TechTimeline(),
-
-          const SizedBox(height: 35),
-
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final isMobile = constraints.maxWidth < 700;
-
-              return isMobile
-                  ? Column(
-                children: const [
-                  StackCard(
-                    title: 'CORE STACK',
-                    chips: [
-                      TechChip(
-                        label: 'Flutter',
-                        icon: Icons.flutter_dash,
-                      ),
-                      TechChip(
-                        label: 'Dart',
-                        icon: Icons.change_history_outlined,
-                      ),
-                      TechChip(
-                        label: 'Supabase',
-                        icon: Icons.bolt,
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 20),
-
-                  StackCard(
-                    title: 'KEY PACKAGES',
-                    chips: [
-                      TechChip(
-                        label: 'Dio',
-                        icon: Icons.wifi,
-                      ),
-                      TechChip(
-                        label: 'Syncfusion PDF',
-                        icon: Icons.picture_as_pdf_outlined,
-                      ),
-                      TechChip(
-                        label: 'Loading Anim',
-                        icon: Icons.auto_awesome,
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 20),
-
-                  StackCard(
-                    title: 'PLATFORMS',
-                    chips: [
-                      TechChip(
-                        label: 'Android',
-                        icon: Icons.android,
-                        color: greenColor,
-                      ),
-                      TechChip(
-                        label: 'iOS',
-                        icon: Icons.apple,
-                      ),
-                      TechChip(
-                        label: 'Web',
-                        icon: Icons.language,
-                      ),
-                      TechChip(
-                        label: 'Desktop',
-                        icon: Icons.desktop_windows_outlined,
-                      ),
-                    ],
-                  ),
-                ],
-              )
-                  : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Expanded(
-                    child: StackCard(
-                      title: 'CORE STACK',
-                      chips: [
-                        TechChip(
-                          label: 'Flutter',
-                          icon: Icons.flutter_dash,
-                        ),
-                        TechChip(
-                          label: 'Dart',
-                          icon: Icons.change_history_outlined,
-                        ),
-                        TechChip(
-                          label: 'Supabase',
-                          icon: Icons.bolt,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(width: 28),
-
-                  Expanded(
-                    child: StackCard(
-                      title: 'KEY PACKAGES',
-                      chips: [
-                        TechChip(
-                          label: 'Dio',
-                          icon: Icons.wifi,
-                        ),
-                        TechChip(
-                          label: 'Syncfusion PDF',
-                          icon: Icons.picture_as_pdf_outlined,
-                        ),
-                        TechChip(
-                          label: 'Loading Anim',
-                          icon: Icons.auto_awesome,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(width: 28),
-
-                  Expanded(
-                    child: StackCard(
-                      title: 'PLATFORMS',
-                      chips: [
-                        TechChip(
-                          label: 'Android',
-                          icon: Icons.android,
-                          color: greenColor,
-                        ),
-                        TechChip(
-                          label: 'iOS',
-                          icon: Icons.apple,
-                        ),
-                        TechChip(
-                          label: 'Web',
-                          icon: Icons.language,
-                        ),
-                        TechChip(
-                          label: 'Desktop',
-                          icon: Icons.desktop_windows_outlined,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
+    final List<TechStackModel> techStacks = [
+      TechStackModel(
+        title: "Core Stack",
+        techStackData: [
+          const TechChip(
+            text: "Flutter",
+            icon: FaIcon(FontAwesomeIcons.flutter),
+          ),
+          const TechChip(
+            text: "Dart",
+            icon: FaIcon(FontAwesomeIcons.dartLang),
+          ),
+          const TechChip(
+            text: "Supabase",
+            icon: FaIcon(FontAwesomeIcons.boltLightning),
           ),
         ],
       ),
-    );
-  }
-}
-
-class StackCard extends StatelessWidget {
-  final String title;
-  final List<TechChip> chips;
-
-  const StackCard({
-    super.key,
-    required this.title,
-    required this.chips,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 180,
+      TechStackModel(
+        title: "Key Packages",
+        techStackData: [
+          const TechChip(
+            text: "Dio",
+            icon: FaIcon(FontAwesomeIcons.wifi),
+          ),
+          const TechChip(
+            text: "Provider",
+            icon: FaIcon(FontAwesomeIcons.water),
+          ),
+          const TechChip(
+            text: "http",
+            icon: FaIcon(FontAwesomeIcons.internetExplorer),
+          ),
+        ],
       ),
-      padding: const EdgeInsets.all(26),
-      decoration: BoxDecoration(
-        color: const Color(0xFF363B60),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: const Color(0xFF464D78),
-        ),
+      TechStackModel(
+        title: "Platforms",
+        techStackData: [
+          const TechChip(
+            text: "Android",
+            icon: FaIcon(FontAwesomeIcons.android),
+          ),
+          const TechChip(
+            text: "Web",
+            icon: FaIcon(FontAwesomeIcons.webflow),
+          ),
+          const TechChip(
+            text: "ios",
+            icon: FaIcon(FontAwesomeIcons.apple),
+          ),
+          const TechChip(
+            text: "windows",
+            icon: FaIcon(FontAwesomeIcons.windows),
+          ),
+        ],
+      ),
+    ];
+
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final size = MediaQuery.of(context).size;
+
+    return Container(
+      color: isDarkMode
+          ? const Color(0xFF0D1B3D) // Dark blue
+          : const Color(0xFFF0F5FF), // Very light blue
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        vertical: 80,
+        horizontal: size.width > 900 ? size.width * 0.1 : 20,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Text(
+            "FEATURED APP",
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  letterSpacing: 3,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 12,
+                  color: Colors.blueAccent,
+                ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Container(
-                width: 14,
-                height: 14,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF6070A8),
-                  shape: BoxShape.circle,
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
               Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFFD6D3D2),
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.5,
-                ),
+                "My Flutter",
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontSize: size.width > 600 ? 40 : 28,
+                      fontWeight: FontWeight.normal,
+                      letterSpacing: 2,
+                    ),
+              ),
+              AfanGradientText(
+                darkRequired: false,
+                text: " Portfolio App",
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontSize: size.width > 600 ? 40 : 28,
+                      fontWeight: FontWeight.normal,
+                    ),
               ),
             ],
           ),
-
-          const SizedBox(height: 22),
-
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: chips,
+          const SizedBox(height: 20),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 700),
+            child: Text(
+              "A premium multi-platform Flutter app connected to Supabase — browse projects, view certificates, download resume, and reach out with a smooth native experience.",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    height: 1.6,
+                    color: isDarkMode ? Colors.white70 : Colors.black87,
+                  ),
+            ),
           ),
+          const SizedBox(height: 40),
+          const TechTimeline(),
+          const SizedBox(height: 40),
+          Wrap(
+            spacing: 40,
+            runSpacing: 20,
+            alignment: WrapAlignment.center,
+            children: techStacks.map((stack) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: size.width > 900 
+                      ? (size.width * 0.8 - 40) / 3 
+                      : double.infinity,
+                ),
+                child: ChangeNotifierProvider(
+                  create: (_) => ContainerProvider(),
+                  child: TechStackContainer(
+                    title: stack.title,
+                    techStackData: stack.techStackData,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 40),
+
         ],
       ),
     );
   }
 }
 
-class TechChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color? color;
+class TechStackModel {
+  final String title;
+  final List<TechChip> techStackData;
 
-  const TechChip({
-    super.key,
-    required this.label,
-    required this.icon,
-    this.color,
+  const TechStackModel({
+    required this.title,
+    required this.techStackData,
   });
-
-  @override
-  Widget build(BuildContext context) {
-    final chipColor = color ?? const Color(0xFF9AA6C9);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 10,
-      ),
-      decoration: BoxDecoration(
-        color: const Color(0xFF3B4066),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: const Color(0xFF4A507A),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 19,
-            color: chipColor,
-          ),
-
-          const SizedBox(width: 8),
-
-          Text(
-            label,
-            style: TextStyle(
-              color: chipColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class TechTimeline extends StatelessWidget {
@@ -367,8 +179,8 @@ class TechTimeline extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Positioned(
-            left: 15,
-            right: 15,
+            left: 30,
+            right: 30,
             bottom: 0,
             child: Container(
               height: 2,
@@ -377,7 +189,7 @@ class TechTimeline extends StatelessWidget {
           ),
 
           Positioned(
-            left: 0,
+            left: 20,
             bottom: 0,
             child: Container(
               width: 2,
@@ -387,7 +199,7 @@ class TechTimeline extends StatelessWidget {
           ),
 
           Positioned(
-            right: 0,
+            right: 20,
             bottom: 0,
             child: Container(
               width: 2,

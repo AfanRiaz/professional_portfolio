@@ -44,15 +44,27 @@ class ReusableContainer extends StatelessWidget {
 
     final hoverBorderColor = const Color(0xFF5267D5);
 
-    return MouseRegion(
-      onEnter: (_) {
+    return GestureDetector(
+      onTapDown: (_) {
         containerProvider.setHovered(true);
+        containerProvider.setIconHovered(true);
       },
-      onExit: (_) {
+      onTapUp: (_) {
         containerProvider.setHovered(false);
+        containerProvider.setIconHovered(false);
       },
-
-      child: LayoutBuilder(
+      onTapCancel: () {
+        containerProvider.setHovered(false);
+        containerProvider.setIconHovered(false);
+      },
+      child: MouseRegion(
+        onEnter: (_) {
+          containerProvider.setHovered(true);
+        },
+        onExit: (_) {
+          containerProvider.setHovered(false);
+        },
+        child: LayoutBuilder(
         builder: (context, constraints) {
 
           /// 📱 Responsive breakpoints
@@ -260,6 +272,7 @@ class ReusableContainer extends StatelessWidget {
           );
         },
       ),
-    );
-  }
+    ),
+  );
+}
 }
