@@ -5,6 +5,7 @@ import 'package:theming_app/widgets/about/about_main.dart';
 import 'package:theming_app/widgets/experience/experience_main.dart';
 import 'package:theming_app/widgets/get_app/get_app.dart';
 import 'package:theming_app/widgets/home/home_main.dart';
+import 'package:theming_app/widgets/skills/skill_main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey aboutKey = GlobalKey();
   GlobalKey experienceKey = GlobalKey();
   GlobalKey getAppKey = GlobalKey();
+  GlobalKey skillKey = GlobalKey();
+
 
   void scrollToSection(GlobalKey key) {
     Scrollable.ensureVisible(
@@ -131,6 +134,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () {
+                    scrollToSection(skillKey);
+                  },
+                  child: const Text("Skills"),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                   style: Theme.of(context).iconButtonTheme.style,
                   onPressed: themeProvider.toggleTheme,
@@ -166,6 +179,11 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             key: getAppKey,
             child: GetApp(),
+          ),
+
+          SliverToBoxAdapter(
+            key: skillKey,
+            child: SkillMain(),
           ),
 
           SliverToBoxAdapter(
