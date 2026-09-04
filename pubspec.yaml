@@ -38,6 +38,7 @@ dependencies:
   provider:
   font_awesome_flutter:
   url_launcher:
+  visibility_detector:
 
 dev_dependencies:
   flutter_test:
