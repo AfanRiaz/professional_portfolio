@@ -5,6 +5,7 @@ import 'package:theming_app/widgets/about/about_main.dart';
 import 'package:theming_app/widgets/experience/experience_main.dart';
 import 'package:theming_app/widgets/get_app/get_app.dart';
 import 'package:theming_app/widgets/home/home_main.dart';
+import 'package:theming_app/widgets/projects/project_main.dart';
 import 'package:theming_app/widgets/skills/skill_main.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey experienceKey = GlobalKey();
   GlobalKey getAppKey = GlobalKey();
   GlobalKey skillKey = GlobalKey();
+  GlobalKey projectKey = GlobalKey();
+
 
 
   void scrollToSection(GlobalKey key) {
@@ -47,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: CustomScrollView(
@@ -57,12 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
 
             backgroundColor:
-            Theme.of(context).scaffoldBackgroundColor.withOpacity(0.27),
+            Theme.of(context).scaffoldBackgroundColor.withAlpha(27),
 
             shape: showBorder
                 ? Border(
               bottom: BorderSide(
-                color: Colors.blue.withOpacity(0.25),
+                color: Colors.blue.withAlpha(25),
                 width: 1,
               ),
             )
@@ -99,6 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollToSection(experienceKey);
                   },
                   child: const Text("Experience"),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: () {
+                    scrollToSection(projectKey);
+                  },
+                  child: const Text("Projects"),
                 ),
               ),
 
@@ -184,6 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             key: skillKey,
             child: SkillMain(),
+          ),
+
+          SliverToBoxAdapter(
+            key: projectKey,
+            child: const ProjectMain(),
           ),
 
           SliverToBoxAdapter(

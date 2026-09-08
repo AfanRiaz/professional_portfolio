@@ -132,7 +132,6 @@ class HomeMain extends StatelessWidget {
                 Image.asset("assets/images/my_pic.png",
                   width: double.infinity,
                   height: size.height,
-
                   fit: BoxFit.cover,
                 ),
                 Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(

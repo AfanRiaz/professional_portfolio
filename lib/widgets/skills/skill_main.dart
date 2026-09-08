@@ -143,7 +143,7 @@ class SkillMain extends StatelessWidget {
 
     ];
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.07, vertical: size.height * 0.2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
