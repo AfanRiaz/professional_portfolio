@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:theming_app/provider/skill_container_provider.dart';
+import 'package:theming_app/widgets/skills/skill_container.dart';
 import '../../themes/custom_themes/text_gradient.dart';
 
 class SkillMain extends StatelessWidget {
@@ -9,6 +11,137 @@ class SkillMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
+    final Color iconColor = darkMode
+        ? const Color.fromARGB(255, 169, 181, 223)
+        : const Color.fromARGB(255, 82, 103, 213);
+
+    final List<SkillContainer> skillsList = [
+      SkillContainer(
+        title: "Flutter",
+        icon: FaIcon(
+          FontAwesomeIcons.flutter,
+          color: iconColor,
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "1",
+      ),
+      SkillContainer(
+        title: "Dart",
+        icon: FaIcon(
+          FontAwesomeIcons.dartLang,
+          color: iconColor,
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "2",),
+
+      SkillContainer(
+        title: "REST APIs",
+        icon: const Icon(Icons.storage),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "3",
+      ),
+
+      SkillContainer(
+        title: "MongoDB",
+        icon: FaIcon(
+          FontAwesomeIcons.database,
+        ),
+        description: "INTERMEDIATE",
+        proficiency: 60.0,
+        id: "4",
+      ),
+
+      SkillContainer(
+        title: "Google Maps",
+        icon: FaIcon(
+          FontAwesomeIcons.locationDot
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "5",
+      ),
+
+      SkillContainer(
+        title: "Figma",
+        icon: FaIcon(
+          FontAwesomeIcons.figma
+        ),
+        description: "INTERMEDIATE",
+        proficiency: 70.0,
+        id: "6",
+      ),
+
+      SkillContainer(
+        title: "Firebase",
+        icon: FaIcon(
+          FontAwesomeIcons.fire,
+        ),
+        description: "INTERMEDIATE",
+        proficiency: 100.0,
+        id: "7",
+      ),
+
+      SkillContainer(
+        title: "Supabase",
+        icon: FaIcon(
+          FontAwesomeIcons.boltLightning
+        ),
+        description: "INTERMEDIATE",
+        proficiency: 80.0,
+        id: "8",
+      ),
+
+      SkillContainer(
+        title: "Claude (Anthropic)",
+        icon: FaIcon(
+          FontAwesomeIcons.claude
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "9",
+      ),
+
+      SkillContainer(
+        title: "ChatGPT",
+        icon: FaIcon(
+          FontAwesomeIcons.openai
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "10",
+      ),
+
+      SkillContainer(
+        title: "Gemini",
+        icon: Icon(Icons.auto_awesome),
+        description: "ADVANCED",
+        proficiency: 100.0,
+        id: "11",
+      ),
+
+      SkillContainer(
+        title: "Grok",
+        icon: const Icon(Icons.smart_toy),
+        description: "ADVANCED",
+        proficiency: 80.0,
+        id: "12",
+      ),
+
+      SkillContainer(
+        title: "Prompt Engineering",
+        icon: FaIcon(
+          FontAwesomeIcons.terminal
+        ),
+        description: "EXPERT",
+        proficiency: 100.0,
+        id: "16",
+      ),
+
+    ];
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
       child: Column(
@@ -43,185 +176,44 @@ class SkillMain extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
+          SizedBox(height: 15),
+          LayoutBuilder(builder: (context, constraints)
+          {
+            int columns;
 
+            if (constraints.maxWidth < 500) {
+              columns = 1;
+            } else if (constraints.maxWidth < 800) {
+              columns = 2;
+            } else if (constraints.maxWidth < 1100) {
+              columns = 3;
+            } else {
+              columns = 4;
+            }
 
+            final spacing = 20.0;
+            final cardWidth =
+                (constraints.maxWidth - (columns - 1) * spacing) / columns;
+            return Wrap(
+                spacing: spacing,
+                runSpacing: spacing,
+
+                children: skillsList.map((skill) {
+                  return SizedBox(
+                    width: cardWidth,
+
+                    child: ChangeNotifierProvider(
+                      create: (_) => SkillContainerProvider(),
+                      child: skill,
+                    ),
+                  );
+                }).toList(),
+              );
+          },
+          ),
         ],
       ),
     );
   }
 }
 
-
-
-
-
-// class HoverLineContainer extends StatefulWidget {
-//   final Widget child;
-//
-//   const HoverLineContainer({
-//     super.key,
-//     required this.child,
-//   });
-//
-//   @override
-//   State<HoverLineContainer> createState() => _HoverLineContainerState();
-// }
-//
-// class _HoverLineContainerState extends State<HoverLineContainer>
-//     with SingleTickerProviderStateMixin {
-//   late AnimationController controller;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//
-//     controller = AnimationController(
-//       vsync: this,
-//       duration: const Duration(milliseconds: 800),
-//     );
-//   }
-//
-//   @override
-//   void dispose() {
-//     controller.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MouseRegion(
-//       onEnter: (_) {
-//         controller.forward();
-//       },
-//       onExit: (_) {
-//         controller.reverse();
-//       },
-//       child: Stack(
-//         clipBehavior: Clip.none,
-//         children: [
-//           AnimatedBuilder(
-//             animation: controller,
-//             builder: (context, child) {
-//               return Positioned.fill(
-//                 left: -20,
-//                 child: IgnorePointer(
-//                   child: CustomPaint(
-//                     painter: LeftAnimatedLinePainter(
-//                       progress: controller.value,
-//                     ),
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//
-//           Container(
-//             decoration: BoxDecoration(
-//               color: const Color(0xFF252A4A),
-//               borderRadius: BorderRadius.circular(20),
-//             ),
-//             child: widget.child,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-class LeftAnimatedLinePainter extends CustomPainter {
-  final double progress;
-
-  LeftAnimatedLinePainter({
-    required this.progress,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF9AA9D6)
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final path = Path();
-
-    // Start from top-left corner
-    path.moveTo(20, 0);
-
-    // Come outside the container
-    path.lineTo(0, 20);
-
-    // Move down
-    path.lineTo(0, size.height - 20);
-
-    // Enter bottom-left corner
-    path.lineTo(20, size.height);
-
-    // Animate the path
-    final pathMetric = path.computeMetrics().first;
-
-    final animatedPath = pathMetric.extractPath(
-      0,
-      pathMetric.length * progress,
-    );
-
-    canvas.drawPath(animatedPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant LeftAnimatedLinePainter oldDelegate) {
-    return oldDelegate.progress != progress;
-  }
-}
-
-
-class AnimatedProgressBar extends StatefulWidget {
-  final double progress;
-
-  const AnimatedProgressBar({
-    super.key,
-    required this.progress,
-  });
-
-  @override
-  State<AnimatedProgressBar> createState() =>
-      _AnimatedProgressBarState();
-}
-
-class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
-  bool startAnimation = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: const Key('progress-bar'),
-      onVisibilityChanged: (info) {
-        if (info.visibleFraction > 0.3 && !startAnimation) {
-          setState(() {
-            startAnimation = true;
-          });
-        }
-      },
-      child: TweenAnimationBuilder<double>(
-        tween: Tween<double>(
-          begin: 0,
-          end: startAnimation ? widget.progress : 0,
-        ),
-        duration: const Duration(seconds: 2),
-        curve: Curves.easeOut,
-        builder: (context, value, child) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: value,
-              minHeight: 8,
-              backgroundColor: Colors.grey.withOpacity(0.2),
-              valueColor: const AlwaysStoppedAnimation(
-                Color(0xFFAAB7E0),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}

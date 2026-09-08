@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:theming_app/home_screen.dart';
 import 'package:theming_app/provider/container_provider.dart';
 import 'package:theming_app/provider/hover_icon_provider.dart';
+import 'package:theming_app/provider/skill_container_provider.dart';
 import 'package:theming_app/provider/theme_provider.dart';
 import 'package:theming_app/themes/theme.dart';
 
@@ -14,6 +15,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => HoverIconProvider(),
       ),
       ChangeNotifierProvider(create: (_) => ContainerProvider(),
+      ),
+      ChangeNotifierProvider(create: (_) => SkillContainerProvider(),
       ),
     ],
         child: const MyApp(),
