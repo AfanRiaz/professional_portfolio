@@ -21,7 +21,6 @@ class SkillContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final darkMode = Theme.of(context).brightness == Brightness.dark;
     final Color iconColor = darkMode
         ? const Color.fromARGB(255, 169, 181, 223)

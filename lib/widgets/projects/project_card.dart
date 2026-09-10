@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 class ProjectData {
   final String title;
@@ -40,329 +41,259 @@ class _ProjectContainerState extends State<ProjectContainer> {
 
     final project = widget.project;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-
-      onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-
-      onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
-      },
-
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
-
-        decoration: BoxDecoration(
-          color: colors.surface,
-
-          borderRadius: BorderRadius.circular(20),
-
-          border: Border.all(
-            color: isHovered
-                ? colors.primary
-                : colors.outline.withValues(alpha: 0.25),
-            width: 1,
-          ),
-
-          boxShadow: [
-            BoxShadow(
-              color: colors.shadow.withValues(
-                alpha: isHovered ? 0.25 : 0.10,
-              ),
-              blurRadius: isHovered ? 25 : 15,
-              spreadRadius: isHovered ? 2 : 0,
-              offset: const Offset(0, 8),
+    return GestureDetector(
+      onTap: () => setState(() => isHovered = true),
+      onTapCancel: () => setState(() => isHovered = false),
+      child: MouseRegion(
+        onEnter: (_) {
+          setState(() {
+            isHovered = true;
+          });
+        },
+        onExit: (_) {
+          setState(() {
+            isHovered = false;
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutCubic,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: isHovered ? colors.primary : colors.outline,
+              width: 1,
             ),
-          ],
-        ),
-
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-
-            children: [
-
-              // ============================================================
-              // IMAGE AREA
-              // ============================================================
-
-              AspectRatio(
-                aspectRatio: 1.55,
-
-                child: Stack(
-                  fit: StackFit.expand,
-
-                  children: [
-
-                    // ------------------------------------------------------
-                    // PROJECT IMAGE
-                    // ------------------------------------------------------
-
-                    Image.asset(
-                      project.image,
-                      fit: BoxFit.cover,
+            boxShadow: isHovered
+                ? [
+                    BoxShadow(
+                      color: colors.primary.withValues(alpha: 45 / 255),
+                      blurRadius: 25,
+                      spreadRadius: 2,
                     ),
-
-                    // ------------------------------------------------------
-                    // DARK HOVER OVERLAY
-                    // ------------------------------------------------------
-
-                    AnimatedOpacity(
-                      duration: const Duration(milliseconds: 250),
-                      opacity: isHovered ? 1.0 : 0.0,
-
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-
-                            colors: [
-                              colors.scrim.withValues(alpha: 0.15),
-                              colors.scrim.withValues(alpha: 0.75),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // ------------------------------------------------------
-                    // PLATFORM BADGE
-                    // ------------------------------------------------------
-
-                    Positioned(
-                      top: 14,
-                      right: 14,
-
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 250),
-
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 11,
-                          vertical: 6,
-                        ),
-
-                        decoration: BoxDecoration(
-                          color: isHovered
-                              ? colors.primary
-                              : colors.surface.withValues(alpha: 0.90),
-
-                          borderRadius: BorderRadius.circular(20),
-
-                          border: Border.all(
-                            color: colors.outline.withValues(alpha: 0.20),
-                          ),
-                        ),
-
-                        child: Text(
-                          project.platform,
-
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: isHovered
-                                ? colors.onPrimary
-                                : colors.onSurface,
-
-                            fontWeight: FontWeight.w700,
-
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // ------------------------------------------------------
-                    // VIEW PROJECT BUTTON
-                    // ------------------------------------------------------
-
-                    Center(
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 250),
-                        opacity: isHovered ? 1.0 : 0.0,
-
+                  ]
+                : [],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Column(
+              children: [
+                // ─────────────────────────────
+                // IMAGE SECTION
+                // ─────────────────────────────
+                AspectRatio(
+                  aspectRatio: 16/10,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // Project image
+                      ClipRect(
                         child: AnimatedScale(
-                          duration: const Duration(milliseconds: 250),
+                          scale: isHovered ? 1.03 : 01.0,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeOutCubic,
+                          child: Image.asset(
+                            project.image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: colors.surfaceContainerHighest,
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                  color: colors.onSurfaceVariant,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
 
-                          scale: isHovered ? 1.0 : 0.85,
+                      // Hover dark overlay
+                      AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: isHovered ? 1 : 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                colors.primary.withValues(alpha: 35 / 255),
+                                colors.scrim.withValues(alpha: 185 / 255),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
-                          child: Material(
-                            color: Colors.transparent,
+                      // Platform badge
+                      Positioned(
+                        top: 18,
+                        left: 18,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: isHovered
+                                ? colors.primary
+                                : colors.surfaceContainerHighest
+                                    .withValues(alpha: 220 / 255),
+                          ),
+                          child: Text(
+                            project.platform,
+                            style: theme.textTheme.labelLarge?.copyWith(
+                              color: isHovered ? colors.onPrimary : colors.onSurface,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 10,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
 
-                            child: InkWell(
+                      // View Project button
+                      Center(
+                        child: AnimatedScale(
+                          scale: isHovered ? 1 : 0.8,
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeOutBack,
+                          child: AnimatedOpacity(
+                            opacity: isHovered ? 1 : 0,
+                            duration: const Duration(milliseconds: 250),
+
+                            child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
 
-                              onTap: () {
-                                // Add your project navigation here.
-                              },
-
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 11,
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 2,
+                                  sigmaY: 0 ,
                                 ),
 
-                                decoration: BoxDecoration(
-                                  color: colors.primary,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 30,
+                                    vertical: 14,
+                                  ),
 
-                                  borderRadius: BorderRadius.circular(30),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
 
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: colors.shadow.withValues(
-                                        alpha: 0.25,
+                                    // Transparent glass
+                                    color: colors.surface.withValues(
+                                      alpha: 0.35,
+                                    ),
+
+                                    border: Border.all(
+                                      color: colors.onPrimary.withValues(
+                                        alpha: 0.05,
                                       ),
-                                      blurRadius: 15,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                ),
-
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: [
-
-                                    Icon(
-                                      Icons.visibility_outlined,
-                                      size: 18,
-                                      color: colors.onPrimary,
+                                      width: 1.2,
                                     ),
 
-                                    const SizedBox(width: 8),
-
-                                    Text(
-                                      project.actionText,
-
-                                      style: theme.textTheme.labelLarge
-                                          ?.copyWith(
-                                        color: colors.onPrimary,
-                                        fontWeight: FontWeight.w600,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: colors.scrim.withValues(
+                                          alpha: 0.20,
+                                        ),
+                                        blurRadius: 20,
+                                        spreadRadius: 1,
                                       ),
+                                    ],
+                                  ),
+
+                                  child: Text(
+                                    project.actionText,
+                                    style: theme.textTheme.titleMedium?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              // ============================================================
-              // PROJECT INFORMATION
-              // ============================================================
-
-              Padding(
-                padding: const EdgeInsets.all(18),
-
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-
-                    // ------------------------------------------------------
-                    // TITLE
-                    // ------------------------------------------------------
-
-                    Text(
-                      project.title,
-
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colors.onSurface,
-                        fontWeight: FontWeight.w600,
-                        height: 1.3,
+                // ─────────────────────────────
+                // INFORMATION SECTION
+                // ─────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    26,
+                    20,
+                    26,
+                    20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      Text(
+                        project.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                          color: colors.onSurface,
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 14),
 
-                    // ------------------------------------------------------
-                    // PROJECT META
-                    // ------------------------------------------------------
-
-                    Row(
-                      children: [
-
-                        Icon(
-                          Icons.photo_library_outlined,
-                          size: 16,
-                          color: colors.onSurfaceVariant,
-                        ),
-
-                        const SizedBox(width: 6),
-
-                        Text(
-                          project.screenshotCount,
-
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colors.onSurfaceVariant,
-                          ),
-                        ),
-
-                        const Spacer(),
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 9,
-                            vertical: 5,
-                          ),
-
-                          decoration: BoxDecoration(
-                            color: colors.primaryContainer,
-
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-
-                          child: Text(
-                            project.technology,
-
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: colors.onPrimaryContainer,
-                              fontWeight: FontWeight.w600,
+                      // Screenshot count + platform
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              project.screenshotCount,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: colors.primary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    // ------------------------------------------------------
-                    // BOTTOM LINE
-                    // ------------------------------------------------------
-
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-
-                      height: 2,
-
-                      width: isHovered ? 55 : 30,
-
-                      decoration: BoxDecoration(
-                        color: colors.primary,
-                        borderRadius: BorderRadius.circular(10),
+                          const SizedBox(width: 12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: colors.primary.withValues(alpha: 25 / 255),
+                              border: Border.all(
+                                color: colors.primary.withValues(alpha: 90 / 255),
+                              ),
+                            ),
+                            child: Text(
+                              project.platform,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: colors.primary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
