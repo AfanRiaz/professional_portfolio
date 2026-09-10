@@ -103,10 +103,10 @@ class ReusableContainer extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
 
-            transform: Matrix4.identity()
-              ..translate(
+            transform: Matrix4.translationValues(
                 0.0,
                 containerProvider.isHovered ? -5.0 : 0.0,
+                0.0,
               ),
 
             decoration: BoxDecoration(

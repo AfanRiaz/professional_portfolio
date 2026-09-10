@@ -5,38 +5,33 @@ import '../../themes/custom_themes/text_gradient.dart';
 class ProjectMain extends StatelessWidget {
   const ProjectMain({super.key});
 
+  static const List<ProjectData> projects = [
+    ProjectData(
+      title: "Dukaan Manager Desktop Python",
+      image: "assets/images/my_pic.png",
+      screenshotCount: "6 screenshots",
+      platform: "EXE",
+      technology: "Python",
+    ),
+    ProjectData(
+      title: "Multical App Flutter",
+      image: "assets/images/my_pic.png",
+      screenshotCount: "5 screenshots",
+      platform: "APK",
+      technology: "Flutter",
+    ),
+    ProjectData(
+      title: "Portfolio Website",
+      image: "assets/images/my_pic.png",
+      screenshotCount: "4 screenshots",
+      platform: "WEB",
+      technology: "Flutter",
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final List<ProjectData> projects = [
-      ProjectData(
-        title: "Dukaan Manager Desktop Python",
-        image: "assets/images/my_pic.png",
-        screenshotCount: "6 screenshots",
-        platform: "EXE",
-        technology: "Python",
-      ),
-
-      ProjectData(
-        title: "Multical App Flutter",
-        image: "assets/images/my_pic.png",
-        screenshotCount: "5 screenshots",
-        platform: "APK",
-        technology: "Flutter",
-      ),
-
-      ProjectData(
-        title: "Portfolio Website",
-        image: "assets/images/my_pic.png",
-        screenshotCount: "4 screenshots",
-        platform: "WEB",
-        technology: "Flutter",
-      ),
-    ];
-    final darkMode = Theme.of(context).brightness == Brightness.dark;
-    final Color iconColor = darkMode
-        ? const Color.fromARGB(255, 169, 181, 223)
-        : const Color.fromARGB(255, 82, 103, 213);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.07),
@@ -46,19 +41,16 @@ class ProjectMain extends StatelessWidget {
           Text(
             "Portfolio",
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: const Color.fromARGB(255, 79, 89, 145),
-              fontWeight: FontWeight.normal,
-            ),
+                  color: const Color.fromARGB(255, 79, 89, 145),
+                  fontWeight: FontWeight.normal,
+                ),
           ),
 
           /// HEADING
           AfanGradientText(
             text: "My Portfolio",
             style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                fontSize: 40,
-                fontWeight: FontWeight.normal,
-                letterSpacing: 0
-            ),
+                fontSize: 40, fontWeight: FontWeight.normal, letterSpacing: 0),
           ),
 
           const SizedBox(height: 10),
@@ -67,15 +59,14 @@ class ProjectMain extends StatelessWidget {
           Text(
             "Real Screenshots fetched Live from Supabase Storage.",
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: const Color.fromARGB(255, 79, 89, 145),
-              fontSize: 20,
-              fontWeight: FontWeight.normal,
-            ),
+                  color: const Color.fromARGB(255, 79, 89, 145),
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           LayoutBuilder(
             builder: (context, constraints) {
-
               final double cardWidth;
 
               if (constraints.maxWidth < 600) {
@@ -107,4 +98,3 @@ class ProjectMain extends StatelessWidget {
     );
   }
 }
-

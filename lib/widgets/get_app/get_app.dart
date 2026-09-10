@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:theming_app/themes/custom_themes/text_gradient.dart';
 import 'package:theming_app/widgets/components/reusable_container.dart';
-import 'package:theming_app/widgets/components/reusable_my_info.dart';
 import '../../provider/container_provider.dart';
 import '../about/about_main.dart';
 import '../components/tech_stack_container.dart';
