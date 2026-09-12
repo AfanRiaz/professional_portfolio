@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import 'dialouge_box_container.dart';
+
 class ProjectData {
   final String title;
   final String image;
@@ -36,13 +38,34 @@ class _ProjectContainerState extends State<ProjectContainer> {
 
   @override
   Widget build(BuildContext context) {
+    final images = [
+      "assets/images/my_pic.png",
+      "assets/images/my_pic.png",
+      "assets/images/my_pic.png",
+      "assets/images/my_pic.png",
+    ];
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
     final project = widget.project;
 
     return GestureDetector(
-      onTap: () => setState(() => isHovered = true),
+      onTap: () async{
+        return showDialog(
+          context: context,
+          barrierColor: Theme.of(context)
+              .colorScheme
+              .scrim
+              .withValues(alpha: 0.65),
+
+          builder: (context) {
+            return DialogueBoxContainer(
+              title: 'Digital Artist Portfolio',
+              images: images,
+            );
+          },
+        );
+      },
       onTapCancel: () => setState(() => isHovered = false),
       child: MouseRegion(
         onEnter: (_) {
