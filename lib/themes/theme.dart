@@ -27,7 +27,7 @@ class AfanAppTheme {
     brightness: Brightness.dark,
     fontFamily: GoogleFonts.poppins().fontFamily,
     primaryColor: Colors.blue,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 8, 13, 43),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 13, 19, 61),
     textTheme: AfanTextTheme.darkTextTheme,
     elevatedButtonTheme: AfanElevatedButtonTheme.darkElevatedButtonTheme,
     appBarTheme: AfanAppbarTheme.darkAppBarTheme,
