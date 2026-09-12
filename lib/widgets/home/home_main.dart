@@ -32,7 +32,7 @@ class HomeMain extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Hi I'm",style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Colors.green),
+                    color: Color.fromARGB(173, 93, 93, 178)),
                 ),
                 AfanGradientText(text: "Afan Riaz", style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     fontSize: 62,fontWeight: FontWeight.w900)),
