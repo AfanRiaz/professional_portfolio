@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theming_app/provider/theme_provider.dart';
 import 'package:theming_app/widgets/about/about_main.dart';
+import 'package:theming_app/widgets/contact/contact_main.dart';
 import 'package:theming_app/widgets/experience/experience_main.dart';
 import 'package:theming_app/widgets/get_app/get_app.dart';
 import 'package:theming_app/widgets/home/home_main.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey getAppKey = GlobalKey();
   GlobalKey skillKey = GlobalKey();
   GlobalKey projectKey = GlobalKey();
+  GlobalKey contactKey = GlobalKey();
 
 
 
@@ -205,6 +207,12 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             key: experienceKey,
             child: ExperienceMain(),
+          ),
+
+
+          SliverToBoxAdapter(
+            key: contactKey,
+            child: ContactMain(),
           ),
 
 

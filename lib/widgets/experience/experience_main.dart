@@ -448,7 +448,7 @@ class _TimelineNode extends StatelessWidget {
         shape: BoxShape.circle,
         color: colorScheme.surface,
         border: Border.all(
-          width: 2,
+          width: 1,
           color: colorScheme.primary.withValues(alpha: 0.7),
         ),
       ),
@@ -484,7 +484,7 @@ class _MobileTimeline extends StatelessWidget {
           top: 25,
           bottom: 25,
           child: Container(
-            width: 3,
+            width: 2,
             decoration: BoxDecoration(
               gradient: _timelineGradient(context),
             ),
