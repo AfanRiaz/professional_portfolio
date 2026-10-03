@@ -7,38 +7,37 @@ class ExperienceMain extends StatelessWidget {
 
   static const List<_ExperienceItem> _items = [
     _ExperienceItem(
-      date: 'Feb 2024 – Present',
+      date: 'Dec 2025 – April 2025',
       type: 'WORK',
       icon: Icons.work_rounded,
-      title: 'Mobile App Developer',
-      company: 'dSMART Solutions',
-      location: 'Karachi, Pakistan',
+      title: 'Flutter Developer Intern',
+      company: 'Neuro App',
+      location: 'Peshawar, Pakistan',
       description:
-      'Building production Flutter & Ionic apps, Angular web platforms, '
-          'and Figma-to-code UI implementations. Led key projects: Reyes, '
-          'KleanKars, Portkey Express, JI Youth, Helpora.',
+      'Building production Flutter apps and web platforms, '
+          'and Figma-to-code UI implementations.',
     ),
     _ExperienceItem(
-      date: 'Aug 2025 – Present',
+      date: 'Aug 2024 – Present',
       type: 'EDUCATION',
       icon: Icons.school_rounded,
-      title: 'ADP Software Engineering',
-      company: 'Ilma University',
-      location: 'Karachi',
+      title: 'Software Engineering',
+      company: 'NUTECH',
+      location: 'Islamabad',
       description:
-      'Pursuing Associate Degree Program in Software Engineering, '
+      'Pursuing BS Software Engineering, '
           'deepening knowledge in algorithms, system design, and full-stack '
-          'development.',
+          'development and many more.',
     ),
     _ExperienceItem(
-      date: '2023 – 2024',
+      date: 'June 2026 – present',
       type: 'WORK',
       icon: Icons.work_rounded,
       title: 'Flutter Developer',
-      company: 'Software Company',
+      company: 'Freelancing',
       location: 'Pakistan',
       description:
-      'Developed responsive mobile applications using Flutter, '
+      'Developing responsive mobile applications using Flutter, '
           'integrated REST APIs, and implemented modern UI designs.',
     ),
   ];

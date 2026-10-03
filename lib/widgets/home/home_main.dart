@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/themes/custom_themes/text_gradient.dart';
 
 import '../../apis/url_opening.dart';
 import '../../provider/hover_icon_provider.dart';
+import '../../supabase/supabase_api.dart';
+import '../../themes/custom_themes/text_gradient.dart';
 
-class HomeMain extends StatelessWidget {
-  const HomeMain({super.key});
+class HomeMain extends StatefulWidget {
+  final GlobalKey projectKey ;
+  const HomeMain({
+    super.key,
+    required this.projectKey,
+  });
+
+  @override
+  State<HomeMain> createState() => _HomeMainState();
+}
+
+class _HomeMainState extends State<HomeMain> {
+
+  void scrollToSection(GlobalKey key) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +67,15 @@ class HomeMain extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          final downloaded = await SupabaseApi().downloadResume();
+                          if (!context.mounted || downloaded) return;
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Unable to download the resume.'),
+                            ),
+                          );
                         },
                         child: const Text("Download CV"),
                       ),
@@ -64,7 +93,9 @@ class HomeMain extends StatelessWidget {
                               Colors.white.withValues(alpha: 0.05)
                           )
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          scrollToSection(widget.projectKey);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: const Text("View my Work"),
@@ -157,7 +188,6 @@ class HomeMain extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class HoverIconButton extends StatelessWidget {

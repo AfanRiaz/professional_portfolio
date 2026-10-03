@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/provider/container_provider.dart';
-import 'package:theming_app/widgets/components/reusable_container.dart';
-import 'package:theming_app/widgets/components/reusable_my_info.dart';
 
 import '../../apis/url_opening.dart';
+import '../../provider/container_provider.dart';
 import '../../themes/custom_themes/text_gradient.dart';
+import '../components/reusable_container.dart';
+import '../components/reusable_my_info.dart';
 
 class AboutMain extends StatefulWidget {
   const AboutMain({super.key});

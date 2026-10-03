@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:my_portfolio/provider/container_provider.dart';
+import 'package:my_portfolio/provider/hover_icon_provider.dart';
+import 'package:my_portfolio/provider/skill_container_provider.dart';
+import 'package:my_portfolio/provider/theme_provider.dart';
+import 'package:my_portfolio/themes/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/home_screen.dart';
-import 'package:theming_app/provider/container_provider.dart';
-import 'package:theming_app/provider/hover_icon_provider.dart';
-import 'package:theming_app/provider/skill_container_provider.dart';
-import 'package:theming_app/provider/theme_provider.dart';
-import 'package:theming_app/themes/theme.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+import 'home_screen.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(url: "https://rhmtxunnybyhqgqofudj.supabase.co",
+  publishableKey: "sb_publishable_A-hI0_zDYOZQUZef0dQFQA_bYamAvJX",
+  );
+  print("Supabase initialized successfully!");
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => ThemeProvider(),
@@ -37,6 +44,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
     return MaterialApp(
+      title: "Afan's Portfolio",
       themeMode: themeProvider.themeMode,
       theme: AfanAppTheme.lightTheme,
       darkTheme: AfanAppTheme.darkTheme,

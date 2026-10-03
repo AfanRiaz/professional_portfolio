@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_portfolio/widgets/skills/skill_container.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/provider/skill_container_provider.dart';
-import 'package:theming_app/widgets/skills/skill_container.dart';
+import '../../provider/skill_container_provider.dart';
 import '../../themes/custom_themes/text_gradient.dart';
 
 class SkillMain extends StatelessWidget {

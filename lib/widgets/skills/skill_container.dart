@@ -128,7 +128,7 @@ class SkillContainer extends StatelessWidget {
                                             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                                 fontWeight: FontWeight.w900,
                                                 fontSize: 15,
-                                              color: darkMode ? Colors.white : Colors.black
+                                                color: darkMode ? Colors.white : Colors.black
                                             ),
                                           ),
                                           const SizedBox(height: 2,),

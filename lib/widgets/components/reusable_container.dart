@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/provider/container_provider.dart';
+
+import '../../provider/container_provider.dart';
 
 class ReusableContainer extends StatelessWidget {
   final double numberFontSize;
@@ -34,8 +35,8 @@ class ReusableContainer extends StatelessWidget {
 
     /// BOTTOM LINE COLOR
     final glowColor = isDark
-        ? Colors.white
-        : const Color.fromARGB(255, 45, 51, 107);
+      ? Colors.white
+      : const Color.fromARGB(255, 45, 51, 107);
 
     /// BORDER COLORS
     final normalBorderColor = isDark

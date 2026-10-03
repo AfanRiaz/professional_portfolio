@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_portfolio/supabase/supabase_api.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/themes/custom_themes/text_gradient.dart';
-import 'package:theming_app/widgets/components/reusable_container.dart';
 import '../../provider/container_provider.dart';
+import '../../themes/custom_themes/text_gradient.dart';
 import '../about/about_main.dart';
+import '../components/reusable_container.dart';
 import '../components/tech_stack_container.dart';
 
 class GetApp extends StatelessWidget {
@@ -31,24 +32,24 @@ class GetApp extends StatelessWidget {
         title: "Auto-fetches projects & certificates from Supabase",
       ),
 
-      const StatsModel(
-        icon: Icon(
-          Icons.picture_as_pdf_outlined,
-          size: 20,
-        ),
-        number: "Pro Resume Viewer",
-        title: "Syncfusion PDF preview with direct device download",
-      ),
+
 
       const StatsModel(
         icon: Icon(
-          Icons.school_outlined,
+          Icons.email_outlined,
           size: 20,
         ),
-        number: "Education & Certs",
-        title: "Progress tracking with pulse animation for ongoing degrees",
+        number: "Email Api Integration",
+        title: "Sending mails to my self when the form is submitted",
       ),
-
+      const StatsModel(
+        icon: Icon(
+          Icons.download_outlined,
+          size: 20,
+        ),
+        number: "APK Distribution",
+        title: "Download and install my Flutter application directly",
+      ),
       const StatsModel(
         icon: Icon(
           Icons.send_outlined,
@@ -89,8 +90,8 @@ class GetApp extends StatelessWidget {
         title: "Key Packages",
         techStackData: [
           const TechChip(
-            text: "Dio",
-            icon: FaIcon(FontAwesomeIcons.wifi),
+            text: "fluttertoast",
+            icon: FaIcon(FontAwesomeIcons.bell),
           ),
           const TechChip(
             text: "Provider",
@@ -489,6 +490,9 @@ class DownloadApkButton extends StatelessWidget {
       },
 
       child: GestureDetector(
+        onTap: (){
+          SupabaseApi().getApps();
+        },
         onTapDown: (_) {
           containerProvider.setHovered(true);
           containerProvider.setIconHovered(true);

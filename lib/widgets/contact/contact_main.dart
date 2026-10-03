@@ -1,7 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/email_service.dart';
 import '../../provider/contact_provider.dart';
+import '../../supabase/supabase_api.dart';
+import '../components/toast_helper.dart';
 
 class ContactMain extends StatelessWidget {
   const ContactMain({super.key});
@@ -77,25 +82,30 @@ class _ContactInformation extends StatelessWidget {
     return Column(
       children: [
         _HoverContactCard(
-          icon: Icons.email_rounded,
+          icon: const Icon(Icons.email_rounded),
           label: 'EMAIL',
-          value: 'junaidkhanzada272@gmail.com',
+          value: 'cadetafan202@gmail.com',
           onTap: () {},
         ),
 
         const SizedBox(height: 20),
 
         _HoverContactCard(
-          icon: Icons.phone_rounded,
+          icon: const Icon(Icons.phone_rounded),
           label: 'PHONE',
-          value: '+92-370-0290153',
+          value: '+92-341-5035548',
           onTap: () {},
         ),
 
         const SizedBox(height: 20),
 
         _HoverContactCard(
-          icon: Icons.chat_rounded,
+          icon: const Center(
+            child: FaIcon(
+              FontAwesomeIcons.whatsapp,
+              color: Colors.lightGreen,
+            ),
+          ),
           label: 'WHATSAPP',
           value: 'Chat on WhatsApp →',
           isAccent: true,
@@ -105,9 +115,9 @@ class _ContactInformation extends StatelessWidget {
         const SizedBox(height: 20),
 
         _HoverContactCard(
-          icon: Icons.location_on_rounded,
+          icon: const Icon(Icons.location_on_rounded),
           label: 'LOCATION',
-          value: 'Karachi, Pakistan',
+          value: 'Rawalpindi, Pakistan',
           onTap: () {},
         ),
 
@@ -120,7 +130,7 @@ class _ContactInformation extends StatelessWidget {
 }
 
 class _HoverContactCard extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final String value;
   final bool isAccent;
@@ -150,7 +160,7 @@ class _HoverContactCard extends StatelessWidget {
 }
 
 class _HoverContactCardContent extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final String value;
   final bool isAccent;
@@ -171,54 +181,46 @@ class _HoverContactCardContent extends StatelessWidget {
     final colors = theme.colorScheme;
 
     final Color accentColor =
-    isAccent ? colors.secondary : colors.primary;
+        isAccent ? colors.secondary : colors.primary;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     /// 🌙 DARK THEME
-    final darkColor = const Color.fromARGB(255, 38, 40, 71);
+    const darkColor = Color.fromARGB(255, 38, 40, 71);
 
     /// ☀️ LIGHT THEME
-    final lightColor = const Color.fromARGB(255, 220, 255, 254);
+    const lightColor = Color.fromARGB(255, 220, 255, 254);
+    final Size size = MediaQuery.of(context).size;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       onEnter: (_) {
         context.read<HoverProvider>().setHover(true);
       },
-
       onExit: (_) {
         context.read<HoverProvider>().setHover(false);
       },
-
       child: GestureDetector(
         onTap: onTap,
-
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOut,
-
           transform: Matrix4.translationValues(
             0,
             hoverProvider.isHovered ? -6 : 0,
             0,
           ),
-
-          padding: const EdgeInsets.all(28),
-
+          padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.008,
+            vertical: size.height * 0.02,
+          ),
           decoration: BoxDecoration(
-            color: isDark
-                ? darkColor
-                : lightColor,
-
+            color: isDark ? darkColor : lightColor,
             borderRadius: BorderRadius.circular(22),
-
             border: Border.all(
               color: hoverProvider.isHovered
                   ? accentColor.withValues(alpha: 0.5)
                   : colors.outline.withValues(alpha: 0.15),
             ),
-
             boxShadow: [
               BoxShadow(
                 color: accentColor.withValues(
@@ -226,32 +228,24 @@ class _HoverContactCardContent extends StatelessWidget {
                 ),
                 blurRadius: hoverProvider.isHovered ? 28 : 8,
                 spreadRadius: hoverProvider.isHovered ? 2 : 0,
-                offset: Offset.zero
+                offset: Offset.zero,
               ),
             ],
           ),
-
           child: Row(
             children: [
               // ICON
               AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
-
-                width: 64,
-                height: 64,
-
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                   color: accentColor.withValues(
                     alpha: hoverProvider.isHovered ? 0.18 : 0.10,
                   ),
                   borderRadius: BorderRadius.circular(14),
                 ),
-
-                child: Icon(
-                  icon,
-                  size: 31,
-                  color: accentColor,
-                ),
+                child: icon,
               ),
 
               const SizedBox(width: 22),
@@ -266,18 +260,18 @@ class _HoverContactCardContent extends StatelessWidget {
                       style: theme.textTheme.labelMedium?.copyWith(
                         color: accentColor.withValues(alpha: 0.7),
                         letterSpacing: 2.2,
+                        fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     Text(
                       value,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -285,8 +279,7 @@ class _HoverContactCardContent extends StatelessWidget {
               ),
 
               // COPY BUTTON FOR EMAIL / PHONE
-              if (!isAccent &&
-                  (label == 'EMAIL' || label == 'PHONE'))
+              if (!isAccent && (label == 'EMAIL' || label == 'PHONE'))
                 Container(
                   width: 46,
                   height: 46,
@@ -315,24 +308,20 @@ class _SocialButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Row(
       children: [
         Expanded(
           child: _SocialButton(
             title: 'GitHub',
-            icon: Icons.code_rounded,
+            icon: const FaIcon(FontAwesomeIcons.github),
             onTap: () {},
           ),
         ),
-
         const SizedBox(width: 15),
-
         Expanded(
           child: _SocialButton(
             title: 'LinkedIn',
-            icon: Icons.business_center_rounded,
+            icon: const FaIcon(FontAwesomeIcons.linkedin),
             onTap: () {},
           ),
         ),
@@ -343,7 +332,7 @@ class _SocialButtons extends StatelessWidget {
 
 class _SocialButton extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final Widget icon;
   final VoidCallback onTap;
 
   const _SocialButton({
@@ -359,40 +348,30 @@ class _SocialButton extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     /// 🌙 DARK THEME
-    final darkColor = const Color.fromARGB(255, 38, 40, 71);
+    const darkColor = Color.fromARGB(255, 38, 40, 71);
 
     /// ☀️ LIGHT THEME
-    final lightColor = const Color.fromARGB(255, 220, 255, 254);
-
+    const lightColor = Color.fromARGB(255, 220, 255, 254);
 
     return Material(
       color: isDark ? darkColor : lightColor,
       borderRadius: BorderRadius.circular(12),
-
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-
         child: Container(
           height: 68,
-
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: colors.outline.withValues(alpha: 0.15),
             ),
           ),
-
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: colors.primary,
-              ),
-
+              icon,
               const SizedBox(width: 10),
-
               Text(
                 title,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -407,8 +386,179 @@ class _SocialButton extends StatelessWidget {
   }
 }
 
-class _ContactForm extends StatelessWidget {
+class _ContactForm extends StatefulWidget {
   const _ContactForm();
+
+  @override
+  State<_ContactForm> createState() => _ContactFormState();
+}
+
+class _ContactFormState extends State<_ContactForm> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _subjectController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _showCenteredToast(BuildContext context, String message, {bool isError = false}) {
+    final screenSize = MediaQuery.of(context).size;
+    final overlay = Overlay.of(context);
+
+    late OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          top: screenSize.height * 0.72,
+          left: 0,
+          right: 0,
+          child: Material(
+            color: Colors.transparent,
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: screenSize.width * 0.85 > 420 ? 420 : screenSize.width * 0.85,
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                decoration: BoxDecoration(
+                  color: isError
+                      ? const Color(0xFFD32F2F)
+                      : const Color(0xFF2E7D32),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 18,
+                      spreadRadius: 2,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isError ? Icons.error_outline : Icons.check_circle_outline,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: Text(
+                        message,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.none,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (overlayEntry.mounted) {
+        overlayEntry.remove();
+      }
+    });
+  }
+
+  Future<void> _handleSubmit() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final subject = _subjectController.text.trim();
+    final message = _messageController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || subject.isEmpty || message.isEmpty) {
+      _showCenteredToast(
+        context,
+        'Please fill in all fields before sending.',
+        isError: true,
+      );
+      return;
+    }
+
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      // 1. Upload to Supabase with 10s timeout
+      final supabaseFuture = SupabaseApi().saveContactResponse(
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+      );
+
+      // 2. Send email via EmailJS with 10s timeout
+      final emailJsFuture = EmailService().sendEmail(
+        name: name,
+        email: email,
+        subject: subject,
+        message: message,
+      );
+
+      final results = await Future.wait([supabaseFuture, emailJsFuture]);
+      final supabaseSuccess = results[0];
+      final emailJsSuccess = results[1];
+
+      if (!mounted) return;
+
+      setState(() {
+        _isSubmitting = false;
+      });
+
+      if (supabaseSuccess || emailJsSuccess) {
+        _nameController.clear();
+        _emailController.clear();
+        _subjectController.clear();
+        _messageController.clear();
+
+        _showCenteredToast(
+          context,
+          'Message sent successfully!',
+          isError: false,
+        );
+      } else {
+        _showCenteredToast(
+          context,
+          'Failed to send message or request timed out. Please try again.',
+          isError: true,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+      });
+      _showCenteredToast(
+        context,
+        'An unexpected error occurred. Please try again.',
+        isError: true,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -417,24 +567,20 @@ class _ContactForm extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     /// 🌙 DARK THEME
-    final darkColor = const Color.fromARGB(255, 36, 39, 77);
+    const darkColor = Color.fromARGB(255, 36, 39, 77);
 
     /// ☀️ LIGHT THEME
-    final lightColor = const Color.fromARGB(255, 220, 255, 254);
+    const lightColor = Color.fromARGB(255, 220, 255, 254);
 
     return Container(
       padding: const EdgeInsets.all(40),
-
       decoration: BoxDecoration(
         color: isDark ? darkColor : lightColor,
-
         borderRadius: BorderRadius.circular(28),
-
         border: Border.all(
           color: colors.outline.withValues(alpha: 0.15),
         ),
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -442,6 +588,7 @@ class _ContactForm extends StatelessWidget {
             'Send a Message',
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
           ),
 
@@ -456,13 +603,13 @@ class _ContactForm extends StatelessWidget {
                 return Column(
                   children: [
                     _ContactTextField(
+                      controller: _nameController,
                       label: 'Name',
-                      hint: 'Junaid Khan',
+                      hint: 'Afan Riaz',
                     ),
-
                     const SizedBox(height: 22),
-
                     _ContactTextField(
+                      controller: _emailController,
                       label: 'Email',
                       hint: 'you@example.com',
                     ),
@@ -474,15 +621,15 @@ class _ContactForm extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _ContactTextField(
+                      controller: _nameController,
                       label: 'Name',
-                      hint: 'Junaid Khan',
+                      hint: 'Afan Riaz',
                     ),
                   ),
-
                   const SizedBox(width: 30),
-
                   Expanded(
                     child: _ContactTextField(
+                      controller: _emailController,
                       label: 'Email',
                       hint: 'you@example.com',
                     ),
@@ -495,6 +642,7 @@ class _ContactForm extends StatelessWidget {
           const SizedBox(height: 25),
 
           _ContactTextField(
+            controller: _subjectController,
             label: 'Subject',
             hint: 'Project discussion',
           ),
@@ -502,6 +650,7 @@ class _ContactForm extends StatelessWidget {
           const SizedBox(height: 25),
 
           _ContactTextField(
+            controller: _messageController,
             label: 'Message',
             hint: 'Tell me about your project...',
             maxLines: 7,
@@ -511,30 +660,35 @@ class _ContactForm extends StatelessWidget {
 
           SizedBox(
             width: double.infinity,
-            height: 72,
-
+            height: 60,
             child: ElevatedButton(
-              onPressed: () {},
-
+              onPressed: _isSubmitting ? null : _handleSubmit,
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-
                 backgroundColor: colors.primary,
-
+                disabledBackgroundColor: colors.primary.withValues(alpha: 0.7),
                 foregroundColor: colors.onPrimary,
-
+                disabledForegroundColor: colors.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(22),
                 ),
               ),
-
-              child: Text(
-                'Send Message →',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: colors.onPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              child: _isSubmitting
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2.5,
+                      ),
+                    )
+                  : Text(
+                      'Send Message →',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: colors.onPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
             ),
           ),
         ],
@@ -547,11 +701,13 @@ class _ContactTextField extends StatelessWidget {
   final String label;
   final String hint;
   final int maxLines;
+  final TextEditingController? controller;
 
   const _ContactTextField({
     required this.label,
     required this.hint,
     this.maxLines = 1,
+    this.controller,
   });
 
   @override
@@ -567,47 +723,38 @@ class _ContactTextField extends StatelessWidget {
           style: theme.textTheme.titleSmall?.copyWith(
             color: colors.primary,
             fontWeight: FontWeight.w600,
+            fontSize: 13,
           ),
         ),
-
         const SizedBox(height: 10),
-
         TextField(
+          controller: controller,
           maxLines: maxLines,
-
-          style: theme.textTheme.bodyLarge,
-
+          style: theme.textTheme.bodyLarge!.copyWith(fontSize: 13),
           decoration: InputDecoration(
             hintText: hint,
-
             hintStyle: theme.textTheme.bodyLarge?.copyWith(
               color: colors.primary.withValues(alpha: 0.6),
+              fontSize: 14,
             ),
-
             filled: true,
-
-            fillColor: colors.surfaceContainerHighest
-                .withValues(alpha: 0.35),
-
+            fillColor: colors.surfaceContainerHighest.withValues(alpha: 0.35),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 24,
-              vertical: 20,
+              vertical: 10,
             ),
-
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide(
                 color: colors.outline.withValues(alpha: 0.12),
               ),
             ),
-
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide(
                 color: colors.outline.withValues(alpha: 0.12),
               ),
             ),
-
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: BorderSide(

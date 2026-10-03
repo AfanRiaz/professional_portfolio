@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'dialouge_box_container.dart';
 
@@ -9,6 +9,8 @@ class ProjectData {
   final String screenshotCount;
   final String platform;
   final String technology;
+  final String screenshotFolder;
+  final List<String> screenshots;
   final String actionText;
 
   const ProjectData({
@@ -17,8 +19,29 @@ class ProjectData {
     required this.screenshotCount,
     required this.platform,
     required this.technology,
+    required this.screenshotFolder,
+    this.screenshots = const [],
     this.actionText = "View Project",
   });
+
+  ProjectData copyWithScreenshots(List<String> images) {
+    final bool hasImages = images.isNotEmpty;
+    final List<String> finalImages =
+        hasImages ? images : const ["NO_IMAGE"];
+    final String primaryImage = finalImages.first;
+
+    return ProjectData(
+      title: title,
+      image: primaryImage,
+      screenshotCount:
+          hasImages ? '${images.length} screenshots' : '0 screenshots',
+      platform: platform,
+      technology: technology,
+      screenshotFolder: screenshotFolder,
+      screenshots: finalImages,
+      actionText: actionText,
+    );
+  }
 }
 
 class ProjectContainer extends StatefulWidget {
@@ -36,32 +59,93 @@ class ProjectContainer extends StatefulWidget {
 class _ProjectContainerState extends State<ProjectContainer> {
   bool isHovered = false;
 
-  @override
-  Widget build(BuildContext context) {
-    final images = [
-      "assets/images/my_pic.png",
-      "assets/images/my_pic.png",
-      "assets/images/my_pic.png",
-      "assets/images/my_pic.png",
-    ];
+  Widget _buildCardImage(BuildContext context, String displayImage) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
+    if (displayImage == "NO_IMAGE" || displayImage.isEmpty) {
+      return Container(
+        color: colors.surfaceContainerHighest.withValues(alpha: 0.65),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.image_not_supported_outlined,
+                size: 40,
+                color: colors.primary.withValues(alpha: 0.75),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "No Images Available",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colors.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Image(
+      image: displayImage.startsWith('http')
+          ? NetworkImage(displayImage)
+          : AssetImage(displayImage) as ImageProvider,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: colors.surfaceContainerHighest.withValues(alpha: 0.65),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.image_not_supported_outlined,
+                  size: 40,
+                  color: colors.primary.withValues(alpha: 0.75),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "No Images Available",
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final images = widget.project.screenshots.isNotEmpty
+        ? widget.project.screenshots
+        : [widget.project.image];
+    final displayImage = images.first;
+
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
     final project = widget.project;
 
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         return showDialog(
           context: context,
-          barrierColor: Theme.of(context)
-              .colorScheme
-              .scrim
-              .withValues(alpha: 0.65),
-
+          barrierColor:
+              Theme.of(context).colorScheme.scrim.withValues(alpha: 0.65),
           builder: (context) {
             return DialogueBoxContainer(
-              title: 'Digital Artist Portfolio',
+              title: project.title,
               images: images,
+              platform: project.platform,
             );
           },
         );
@@ -105,29 +189,17 @@ class _ProjectContainerState extends State<ProjectContainer> {
                 // IMAGE SECTION
                 // ─────────────────────────────
                 AspectRatio(
-                  aspectRatio: 16/10,
+                  aspectRatio: 16 / 10,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
                       // Project image
                       ClipRect(
                         child: AnimatedScale(
-                          scale: isHovered ? 1.03 : 01.0,
+                          scale: isHovered ? 1.03 : 1.0,
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeOutCubic,
-                          child: Image.asset(
-                            project.image,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: colors.surfaceContainerHighest,
-                                child: Icon(
-                                  Icons.broken_image_outlined,
-                                  color: colors.onSurfaceVariant,
-                                ),
-                              );
-                            },
-                          ),
+                          child: _buildCardImage(context, displayImage),
                         ),
                       ),
 
@@ -169,7 +241,9 @@ class _ProjectContainerState extends State<ProjectContainer> {
                           child: Text(
                             project.platform,
                             style: theme.textTheme.labelLarge?.copyWith(
-                              color: isHovered ? colors.onPrimary : colors.onSurface,
+                              color: isHovered
+                                  ? colors.onPrimary
+                                  : colors.onSurface,
                               fontWeight: FontWeight.w800,
                               fontSize: 10,
                               letterSpacing: 1,
@@ -187,37 +261,29 @@ class _ProjectContainerState extends State<ProjectContainer> {
                           child: AnimatedOpacity(
                             opacity: isHovered ? 1 : 0,
                             duration: const Duration(milliseconds: 250),
-
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
-
                               child: BackdropFilter(
                                 filter: ImageFilter.blur(
                                   sigmaX: 2,
-                                  sigmaY: 0 ,
+                                  sigmaY: 0,
                                 ),
-
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 30,
                                     vertical: 14,
                                   ),
-
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
-
-                                    // Transparent glass
                                     color: colors.surface.withValues(
                                       alpha: 0.35,
                                     ),
-
                                     border: Border.all(
                                       color: colors.onPrimary.withValues(
                                         alpha: 0.05,
                                       ),
                                       width: 1.2,
                                     ),
-
                                     boxShadow: [
                                       BoxShadow(
                                         color: colors.scrim.withValues(
@@ -228,10 +294,10 @@ class _ProjectContainerState extends State<ProjectContainer> {
                                       ),
                                     ],
                                   ),
-
                                   child: Text(
                                     project.actionText,
-                                    style: theme.textTheme.titleMedium?.copyWith(
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
                                       color: Colors.white,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w800,
@@ -296,9 +362,11 @@ class _ProjectContainerState extends State<ProjectContainer> {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: colors.primary.withValues(alpha: 25 / 255),
+                              color:
+                                  colors.primary.withValues(alpha: 25 / 255),
                               border: Border.all(
-                                color: colors.primary.withValues(alpha: 90 / 255),
+                                color:
+                                    colors.primary.withValues(alpha: 90 / 255),
                               ),
                             ),
                             child: Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:theming_app/provider/container_provider.dart';
+
+import '../../provider/container_provider.dart';
 
 class ReusableMyInfo extends StatelessWidget {
   final Widget icon;
