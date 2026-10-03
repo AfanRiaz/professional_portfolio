@@ -56,4 +56,36 @@ class UrlOpening {
       return false;
     }
   }
+  Future<bool> phoneUrl() async {
+    try {
+      final Uri url = Uri(
+        scheme: 'tel',
+        path: '923415035548',
+      );
+
+      return await launchUrl(
+        url,
+        webOnlyWindowName: '_blank',
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('Email error: $e');
+      return false;
+    }
+  }
+  Future<bool> whatsappUrl() async {
+    try{
+      final Uri url = Uri.parse(
+        'https://wa.me/923415035548',
+      );
+      return await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+    }
+    catch(e){
+      debugPrint('Whatsapp error: $e');
+      return false;
+    }
+  }
 }

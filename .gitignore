@@ -6,6 +6,14 @@
 .DS_Store
 .atom/
 .artifacts/
+*.apk
+# Ignore all build files
+build/*
+
+# But keep Flutter Web build
+!build/web/
+!build/web/**
+*.aab
 .history
 .svn/
 .swiftpm/

@@ -1,6 +1,6 @@
 {
-    "name": "theming_app",
-    "short_name": "theming_app",
+    "name": "Afan's Portfolio",
+    "short_name": "Afan's Portfolio",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

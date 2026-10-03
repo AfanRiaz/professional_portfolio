@@ -265,7 +265,7 @@ class _AboutMainState extends State<AboutMain> {
             ),
             onPressed: () {
               final urlOpening = UrlOpening();
-              urlOpening.emailUrl();
+              urlOpening.phoneUrl();
             },
             child: Text(
               "+92-3415035548",
