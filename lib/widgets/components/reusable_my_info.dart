@@ -49,6 +49,7 @@ class ReusableMyInfo extends StatelessWidget {
         : const Color.fromARGB(255, 200, 215, 255);
 
     final hoverIconBoxColor = const Color(0xFF5267D5);
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
 
     /// ICON COLORS
     final normalIconColor = isDark
@@ -56,24 +57,22 @@ class ReusableMyInfo extends StatelessWidget {
         : const Color(0xFF5267D5);
 
     return GestureDetector(
+      onTap: isMobile ? () {
+        containerProvider.toggleHovered();
+        containerProvider.setIconHovered(containerProvider.isHovered);
+      } : null,
       onTapDown: (_) {
-        containerProvider.setHovered(true);
-        containerProvider.setIconHovered(true);
-      },
-      onTapUp: (_) {
-        containerProvider.setHovered(false);
-        containerProvider.setIconHovered(false);
-      },
-      onTapCancel: () {
-        containerProvider.setHovered(false);
-        containerProvider.setIconHovered(false);
+        if (!isMobile) {
+          containerProvider.setHovered(true);
+          containerProvider.setIconHovered(true);
+        }
       },
       child: MouseRegion(
         onEnter: (_) {
-          containerProvider.setHovered(true);
+          if (!isMobile) containerProvider.setHovered(true);
         },
         onExit: (_) {
-          containerProvider.setHovered(false);
+          if (!isMobile) containerProvider.setHovered(false);
         },
         child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),

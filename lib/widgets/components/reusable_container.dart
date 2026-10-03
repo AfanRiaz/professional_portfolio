@@ -44,26 +44,22 @@ class ReusableContainer extends StatelessWidget {
         : const Color(0xFF8FA8FF);
 
     final hoverBorderColor = const Color(0xFF5267D5);
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
 
     return GestureDetector(
+      onTap: isMobile ? containerProvider.toggleHovered : null,
       onTapDown: (_) {
-        containerProvider.setHovered(true);
-        containerProvider.setIconHovered(true);
-      },
-      onTapUp: (_) {
-        containerProvider.setHovered(false);
-        containerProvider.setIconHovered(false);
-      },
-      onTapCancel: () {
-        containerProvider.setHovered(false);
-        containerProvider.setIconHovered(false);
+        if (!isMobile) {
+          containerProvider.setHovered(true);
+          containerProvider.setIconHovered(true);
+        }
       },
       child: MouseRegion(
         onEnter: (_) {
-          containerProvider.setHovered(true);
+          if (!isMobile) containerProvider.setHovered(true);
         },
         onExit: (_) {
-          containerProvider.setHovered(false);
+          if (!isMobile) containerProvider.setHovered(false);
         },
         child: LayoutBuilder(
         builder: (context, constraints) {

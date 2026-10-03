@@ -7,4 +7,9 @@ class SkillContainerProvider extends ChangeNotifier{
     isHovered = value;
     notifyListeners();
   }
+
+  void toggleHovered(){
+    isHovered = !isHovered;
+    notifyListeners();
+  }
 }

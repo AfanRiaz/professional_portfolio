@@ -29,20 +29,20 @@ class TechStackContainer extends StatelessWidget {
         : const Color(0xFF8FA8FF);
 
     final hoverBorderColor = const Color(0xFF5267D5);
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
 
     return GestureDetector(
+      onTap: isMobile ? containerProvider.toggleHovered : null,
       onTapDown: (_) {
-        containerProvider.setHovered(true);
-      },
-      onTapUp: (_) {
-        containerProvider.setHovered(false);
-      },
-      onTapCancel: () {
-        containerProvider.setHovered(false);
+        if (!isMobile) containerProvider.setHovered(true);
       },
       child: MouseRegion(
-        onEnter: (_) => containerProvider.setHovered(true),
-        onExit: (_) => containerProvider.setHovered(false),
+        onEnter: (_) {
+          if (!isMobile) containerProvider.setHovered(true);
+        },
+        onExit: (_) {
+          if (!isMobile) containerProvider.setHovered(false);
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOutCubic,

@@ -9,6 +9,11 @@ class ContainerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleHovered() {
+    isHovered = !isHovered;
+    notifyListeners();
+  }
+
   void setIconHovered(bool value) {
     isIconHovered = value;
     notifyListeners();

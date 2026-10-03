@@ -8,7 +8,7 @@ import '../../supabase/supabase_api.dart';
 import '../../themes/custom_themes/text_gradient.dart';
 
 class HomeMain extends StatefulWidget {
-  final GlobalKey projectKey ;
+  final GlobalKey projectKey;
   const HomeMain({
     super.key,
     required this.projectKey,
@@ -19,7 +19,6 @@ class HomeMain extends StatefulWidget {
 }
 
 class _HomeMainState extends State<HomeMain> {
-
   void scrollToSection(GlobalKey key) {
     Scrollable.ensureVisible(
       key.currentContext!,
@@ -34,16 +33,15 @@ class _HomeMainState extends State<HomeMain> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return LayoutBuilder(builder: (context, constraints) {
-      if(size.width >= 950){
+      if (size.width >= 950) {
         return rowWidget(context, size);
-      }
-      else {
-        return columnWidget(context);
+      } else {
+        return columnWidget(context, size);
       }
     });
   }
 
-  Widget rowWidget(BuildContext context,Size size){
+  Widget rowWidget(BuildContext context, Size size) {
     return Row(
       children: [
         Expanded(
@@ -52,23 +50,33 @@ class _HomeMainState extends State<HomeMain> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Hi I'm",style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: Color.fromARGB(173, 93, 93, 178)),
+                Text(
+                  "Hi I'm",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: const Color.fromARGB(173, 93, 93, 178),
+                      ),
                 ),
-                AfanGradientText(text: "Afan Riaz", style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    fontSize: 62,fontWeight: FontWeight.w900)),
-                Text("Results-driven Mobile & Web Developer with 1+ years of experience,"
-                    ""
-                    " passionate about building fast, scalable, and user-focused applications."
-                    " Leveraging modern technologies and AI-powered tools to write smarter code,"
-                    " ship faster, and turn ideas into impactful digital experiences."),
+                AfanGradientText(
+                  text: "Afan Riaz",
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        fontSize: 62,
+                        fontWeight: FontWeight.w900,
+                      ),
+                ),
+                const Text(
+                  "Results-driven Mobile & Web Developer with 1+ years of experience, "
+                  "passionate about building fast, scalable, and user-focused applications. "
+                  "Leveraging modern technologies and AI-powered tools to write smarter code, "
+                  "ship faster, and turn ideas into impactful digital experiences.",
+                ),
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () async {
-                          final downloaded = await SupabaseApi().downloadResume();
+                          final downloaded =
+                              await SupabaseApi().downloadResume();
                           if (!context.mounted || downloaded) return;
 
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -83,22 +91,23 @@ class _HomeMainState extends State<HomeMain> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextButton(
-                        style: Theme.of(context).textButtonTheme.style!.copyWith(
-                          shape: WidgetStatePropertyAll(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadiusGeometry.circular(30)
-                              )
-                          ),
-                          backgroundColor: WidgetStatePropertyAll(
-                              Colors.white.withValues(alpha: 0.05)
-                          )
-                        ),
+                        style:
+                            Theme.of(context).textButtonTheme.style!.copyWith(
+                                  shape: WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                  backgroundColor: WidgetStatePropertyAll(
+                                    Colors.white.withValues(alpha: 0.05),
+                                  ),
+                                ),
                         onPressed: () {
                           scrollToSection(widget.projectKey);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: const Text("View my Work"),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text("View my Work"),
                         ),
                       ),
                     ),
@@ -107,35 +116,38 @@ class _HomeMainState extends State<HomeMain> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    ChangeNotifierProvider(create: (_) => HoverIconProvider(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: HoverIconButton(
-                        onPressed: () async {
-                          await UrlOpening().gitHubUrl();
-                        },
-                        icon: const FaIcon(
-                          FontAwesomeIcons.github,
-                          size: 22,
+                    ChangeNotifierProvider(
+                      create: (_) => HoverIconProvider(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: HoverIconButton(
+                          onPressed: () async {
+                            await UrlOpening().gitHubUrl();
+                          },
+                          icon: const FaIcon(
+                            FontAwesomeIcons.github,
+                            size: 22,
+                          ),
                         ),
                       ),
                     ),
-                    ),
-                    ChangeNotifierProvider(create: (_) => HoverIconProvider(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: HoverIconButton(
-                        onPressed: () async {
-                          await UrlOpening().linkedInUrl();
-                        },
-                        icon: const FaIcon(
-                          FontAwesomeIcons.linkedin,
-                          size: 22,
+                    ChangeNotifierProvider(
+                      create: (_) => HoverIconProvider(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: HoverIconButton(
+                          onPressed: () async {
+                            await UrlOpening().linkedInUrl();
+                          },
+                          icon: const FaIcon(
+                            FontAwesomeIcons.linkedin,
+                            size: 22,
+                          ),
                         ),
                       ),
                     ),
-                    ),
-                    ChangeNotifierProvider(create: (_) => HoverIconProvider(),
+                    ChangeNotifierProvider(
+                      create: (_) => HoverIconProvider(),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: HoverIconButton(
@@ -149,43 +161,223 @@ class _HomeMainState extends State<HomeMain> {
                         ),
                       ),
                     ),
-
                   ],
                 )
-
               ],
             ),
           ),
         ),
         Expanded(
-            child: Stack(
-              children: [
-                Image.asset("assets/images/my_pic.png",
-                  width: double.infinity,
-                  height: size.height,
-                  fit: BoxFit.cover,
-                ),
-                Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(
+          child: Stack(
+            children: [
+              Image.asset(
+                "assets/images/my_pic.png",
+                width: double.infinity,
+                height: size.height,
+                fit: BoxFit.cover,
+              ),
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          Theme.of(context).scaffoldBackgroundColor,
-                          Theme.of(context).scaffoldBackgroundColor.withAlpha(10),
-                          Colors.transparent
-                        ])
-                )))
-              ],
-            )),
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Theme.of(context).scaffoldBackgroundColor,
+                        Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withAlpha(10),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  Widget columnWidget(BuildContext context){
-    return Column(
-      children: [
+  Widget columnWidget(BuildContext context, Size size) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: size.width * 0.06,
+        vertical: 32,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // PROFILE IMAGE CONTAINER
+          Container(
+            width: double.infinity,
+            height: size.width * 0.85,
+            constraints: const BoxConstraints(maxHeight: 420),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withAlpha(40),
+                  blurRadius: 35,
+                  spreadRadius: 6,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                "assets/images/my_pic.png",
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest,
+                    child: const Icon(Icons.person, size: 80),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(height: 28),
 
-      ],
+          // GREETING
+          Text(
+            "Hi I'm",
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: const Color.fromARGB(173, 93, 93, 178),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+
+          // NAME
+          AfanGradientText(
+            text: "Afan Riaz",
+            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w900,
+                ),
+          ),
+          const SizedBox(height: 16),
+
+          // BIO
+          Text(
+            "Results-driven Mobile & Web Developer with 1+ years of experience, "
+            "passionate about building fast, scalable, and user-focused applications. "
+            "Leveraging modern technologies and AI-powered tools to write smarter code, "
+            "ship faster, and turn ideas into impactful digital experiences.",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.8),
+                ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+
+          // BUTTONS (DOWNLOAD CV & VIEW MY WORK)
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  final downloaded = await SupabaseApi().downloadResume();
+                  if (!context.mounted || downloaded) return;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Unable to download the resume.'),
+                    ),
+                  );
+                },
+                child: const Text("Download CV"),
+              ),
+              TextButton(
+                style: Theme.of(context).textButtonTheme.style!.copyWith(
+                      shape: WidgetStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      backgroundColor: WidgetStatePropertyAll(
+                        Colors.white.withValues(alpha: 0.05),
+                      ),
+                    ),
+                onPressed: () {
+                  scrollToSection(widget.projectKey);
+                },
+                child: const Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
+                  child: Text("View my Work"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // SOCIAL ICONS
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ChangeNotifierProvider(
+                create: (_) => HoverIconProvider(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: HoverIconButton(
+                    onPressed: () async {
+                      await UrlOpening().gitHubUrl();
+                    },
+                    icon: const FaIcon(
+                      FontAwesomeIcons.github,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => HoverIconProvider(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: HoverIconButton(
+                    onPressed: () async {
+                      await UrlOpening().linkedInUrl();
+                    },
+                    icon: const FaIcon(
+                      FontAwesomeIcons.linkedin,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => HoverIconProvider(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: HoverIconButton(
+                    onPressed: () async {
+                      await UrlOpening().emailUrl();
+                    },
+                    icon: const FaIcon(
+                      FontAwesomeIcons.envelopeOpen,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -216,29 +408,29 @@ class HoverIconButton extends StatelessWidget {
           hoverIconProvider.setHovered(false);
         },
         child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        width: hoverIconProvider.isHovered ? 48 : 40,
-        height: hoverIconProvider.isHovered ? 48 : 40,
-        child: Transform.rotate(
-          angle: hoverIconProvider.isHovered ? 0.08 : 0,
-          child: IconButton(
-            style: IconButton.styleFrom(
-              fixedSize: Size(
-                hoverIconProvider.isHovered ? 48 : 40,
-                hoverIconProvider.isHovered ? 48 : 40,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          width: hoverIconProvider.isHovered ? 48 : 40,
+          height: hoverIconProvider.isHovered ? 48 : 40,
+          child: Transform.rotate(
+            angle: hoverIconProvider.isHovered ? 0.08 : 0,
+            child: IconButton(
+              style: IconButton.styleFrom(
+                fixedSize: Size(
+                  hoverIconProvider.isHovered ? 48 : 40,
+                  hoverIconProvider.isHovered ? 48 : 40,
+                ),
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              onPressed: onPressed,
+              icon: icon,
             ),
-            onPressed: onPressed,
-            icon: icon,
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

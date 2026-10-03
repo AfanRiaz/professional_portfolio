@@ -315,23 +315,29 @@ class TechTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final double padding = screenWidth > 900
+        ? 180.0
+        : screenWidth > 600
+            ? 80.0
+            : 20.0;
+
     return SizedBox(
       height: 40,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Positioned(
-            left: 180,
-            right: 180,
+            left: padding,
+            right: padding,
             bottom: 0,
             child: Container(
               height: 2,
               color: const Color(0xFF59638D),
             ),
           ),
-
           Positioned(
-            left: 180,
+            left: padding,
             bottom: 0,
             child: Container(
               width: 2,
@@ -339,9 +345,8 @@ class TechTimeline extends StatelessWidget {
               color: const Color(0xFF59638D),
             ),
           ),
-
           Positioned(
-            right: 180,
+            right: padding,
             bottom: 0,
             child: Container(
               width: 2,
@@ -349,7 +354,6 @@ class TechTimeline extends StatelessWidget {
               color: const Color(0xFF59638D),
             ),
           ),
-
           Positioned(
             bottom: 0,
             child: Container(
@@ -391,29 +395,23 @@ class _NewContainerState extends State<NewContainer> {
   @override
   Widget build(BuildContext context) {
     final isHovered = context.watch<ContainerProvider>();
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
 
       onEnter: (_) {
-        isHovered.setHovered(true);
+        if (!isMobile) isHovered.setHovered(true);
       },
 
       onExit: (_) {
-       isHovered.setHovered(false);
+        if (!isMobile) isHovered.setHovered(false);
       },
 
       child: GestureDetector(
+        onTap: isMobile ? isHovered.toggleHovered : null,
         onTapDown: (_) {
-            isHovered.setHovered(true);
-        },
-
-        onTapUp: (_) {
-          isHovered.setHovered(false);
-        },
-
-        onTapCancel: () {
-          isHovered.setHovered(false);
+          if (!isMobile) isHovered.setHovered(true);
         },
 
         child: AnimatedContainer(
@@ -475,37 +473,38 @@ class DownloadApkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final containerProvider = context.watch<ContainerProvider>();
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
 
       onEnter: (_) {
-        containerProvider.setHovered(true);
-        containerProvider.setIconHovered(true);
+        if (!isMobile) {
+          containerProvider.setHovered(true);
+          containerProvider.setIconHovered(true);
+        }
       },
 
       onExit: (_) {
-        containerProvider.setHovered(false);
-        containerProvider.setIconHovered(false);
+        if (!isMobile) {
+          containerProvider.setHovered(false);
+          containerProvider.setIconHovered(false);
+        }
       },
 
       child: GestureDetector(
         onTap: (){
+          if (isMobile) {
+            containerProvider.toggleHovered();
+            containerProvider.setIconHovered(containerProvider.isHovered);
+          }
           SupabaseApi().getApps();
         },
         onTapDown: (_) {
-          containerProvider.setHovered(true);
-          containerProvider.setIconHovered(true);
-        },
-
-        onTapUp: (_) {
-          containerProvider.setHovered(false);
-          containerProvider.setIconHovered(false);
-        },
-
-        onTapCancel: () {
-          containerProvider.setHovered(false);
-          containerProvider.setIconHovered(false);
+          if (!isMobile) {
+            containerProvider.setHovered(true);
+            containerProvider.setIconHovered(true);
+          }
         },
 
         child: AnimatedScale(

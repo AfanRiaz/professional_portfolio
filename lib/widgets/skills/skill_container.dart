@@ -34,6 +34,7 @@ class SkillContainer extends StatelessWidget {
         ? const Color.fromARGB(255, 82, 103, 213)
         : const Color.fromARGB(255, 82, 103, 213);
     final containerState = context.watch<SkillContainerProvider>();
+    final isMobile = MediaQuery.sizeOf(context).width < 950;
     return AnimatedScale(
         scale: containerState.isHovered ? 1.04 : 1.0,
         duration: Duration(milliseconds: 300),
@@ -66,21 +67,16 @@ class SkillContainer extends StatelessWidget {
                 clipBehavior: Clip.hardEdge,
                 children: [
                   GestureDetector(
+                    onTap: isMobile ? containerState.toggleHovered : null,
                     onTapDown: (_){
-                      containerState.setHovered(true);
-                    },
-                    onTapUp: (_){
-                      containerState.setHovered(false);
-                    },
-                    onTapCancel: (){
-                      containerState.setHovered(false);
+                      if (!isMobile) containerState.setHovered(true);
                     },
                     child: MouseRegion(
                       onEnter: (_){
-                        containerState.setHovered(true);
+                        if (!isMobile) containerState.setHovered(true);
                       },
                       onExit: (_){
-                        containerState.setHovered(false);
+                        if (!isMobile) containerState.setHovered(false);
                       },
                       child: Container(
                         color: darkMode ? const Color.fromARGB(255, 38, 40, 71) : Color.fromARGB(255, 220, 255, 254),
