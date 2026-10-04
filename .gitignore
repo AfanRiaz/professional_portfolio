@@ -12,11 +12,8 @@
 migrate_working_dir/
 
 # Ignore ALL build files
-/build/*
+/build/
 
-# Allow ONLY Flutter Web build
-!/build/web/
-!/build/web/**
 
 # Android packages
 *.apk
