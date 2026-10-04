@@ -58,6 +58,11 @@ class SupabaseApi {
     }
   }
 
+  Future<dynamic> getImage() async{
+    final image = await supabase.storage.from('images').getPublicUrl('my_pic.jpeg');
+    return image;
+  }
+
   Future<void> getPdfs() async {
     await supabase.from('pdfs').select();
   }

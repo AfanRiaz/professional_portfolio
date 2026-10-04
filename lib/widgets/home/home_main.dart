@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../apis/url_opening.dart';
 import '../../provider/hover_icon_provider.dart';
@@ -42,6 +43,9 @@ class _HomeMainState extends State<HomeMain> {
   }
 
   Widget rowWidget(BuildContext context, Size size) {
+    final imageUrl = Supabase.instance.client.storage
+        .from('images')
+        .getPublicUrl('my_pic.jpeg');
     return Row(
       children: [
         Expanded(
@@ -170,8 +174,8 @@ class _HomeMainState extends State<HomeMain> {
         Expanded(
           child: Stack(
             children: [
-              Image.asset(
-                "assets/images/my_pic.png",
+              Image.network(
+                imageUrl,
                 width: double.infinity,
                 height: size.height,
                 fit: BoxFit.cover,
@@ -201,6 +205,9 @@ class _HomeMainState extends State<HomeMain> {
   }
 
   Widget columnWidget(BuildContext context, Size size) {
+    final imageUrl = Supabase.instance.client.storage
+        .from('images')
+        .getPublicUrl('my_pic.jpeg');
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: size.width * 0.12,
@@ -221,8 +228,8 @@ class _HomeMainState extends State<HomeMain> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.asset(
-                    "assets/images/my_pic.png",
+                  Image.network(
+                    imageUrl,
                     fit: BoxFit.cover,
                   ),
                   Positioned.fill(
