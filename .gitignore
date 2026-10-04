@@ -11,10 +11,12 @@
 .swiftpm/
 migrate_working_dir/
 
-# Build files
-build/*
-!build/web/
-!build/web/**
+# Ignore ALL build files
+/build/*
+
+# Allow ONLY Flutter Web build
+!/build/web/
+!/build/web/**
 
 # Android packages
 *.apk
@@ -27,7 +29,6 @@ build/*
 .idea/
 
 # VS Code
-# Uncomment if you want to ignore VS Code settings
 # .vscode/
 
 # Flutter / Dart / Pub
@@ -37,7 +38,6 @@ build/*
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-**/.pub/
 coverage/
 
 # Symbolication
