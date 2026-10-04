@@ -33,7 +33,7 @@ class _HomeMainState extends State<HomeMain> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return LayoutBuilder(builder: (context, constraints) {
-      if (size.width >= 950) {
+      if (size.width >= 850) {
         return rowWidget(context, size);
       } else {
         return columnWidget(context, size);
@@ -203,40 +203,46 @@ class _HomeMainState extends State<HomeMain> {
   Widget columnWidget(BuildContext context, Size size) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.06,
+        horizontal: size.width * 0.12,
         vertical: 32,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // PROFILE IMAGE CONTAINER
+          // RECTANGULAR PROFILE IMAGE CONTAINER (DESKTOP STYLE FOR MOBILE)
           Container(
-            width: double.infinity,
-            height: size.width * 0.85,
-            constraints: const BoxConstraints(maxHeight: 420),
+            height: size.height * 0.72,
+            width: size.width * 0.62,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withAlpha(40),
-                  blurRadius: 35,
-                  spreadRadius: 6,
-                ),
-              ],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                "assets/images/my_pic.png",
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .surfaceContainerHighest,
-                    child: const Icon(Icons.person, size: 80),
-                  );
-                },
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    "assets/images/my_pic.png",
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Theme.of(context).scaffoldBackgroundColor,
+                            Theme.of(context)
+                                .scaffoldBackgroundColor
+                                .withAlpha(10),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -396,9 +402,10 @@ class HoverIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final hoverIconProvider = context.watch<HoverIconProvider>();
     return GestureDetector(
-      onTapDown: (_) => hoverIconProvider.setHovered(true),
-      onTapUp: (_) => hoverIconProvider.setHovered(false),
-      onTapCancel: () => hoverIconProvider.setHovered(false),
+      onTap: () {
+        hoverIconProvider.setHovered(!hoverIconProvider.isHovered);
+        onPressed();
+      },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (_) {
@@ -425,7 +432,10 @@ class HoverIconButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: onPressed,
+              onPressed: () {
+                hoverIconProvider.setHovered(!hoverIconProvider.isHovered);
+                onPressed();
+              },
               icon: icon,
             ),
           ),

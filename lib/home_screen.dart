@@ -10,20 +10,16 @@ import 'package:my_portfolio/widgets/projects/project_main.dart';
 import 'package:my_portfolio/widgets/skills/skill_main.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
-class _HomeScreenState extends State<HomeScreen> {
-  GlobalKey homeKey = GlobalKey();
-  GlobalKey aboutKey = GlobalKey();
-  GlobalKey experienceKey = GlobalKey();
-  GlobalKey getAppKey = GlobalKey();
-  GlobalKey skillKey = GlobalKey();
-  GlobalKey projectKey = GlobalKey();
-  GlobalKey contactKey = GlobalKey();
+  final GlobalKey homeKey = GlobalKey();
+  final GlobalKey aboutKey = GlobalKey();
+  final GlobalKey experienceKey = GlobalKey();
+  final GlobalKey getAppKey = GlobalKey();
+  final GlobalKey skillKey = GlobalKey();
+  final GlobalKey projectKey = GlobalKey();
+  final GlobalKey contactKey = GlobalKey();
 
   void scrollToSection(GlobalKey key) {
     Scrollable.ensureVisible(
@@ -33,22 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final ScrollController scrollController = ScrollController();
-  bool showBorder = false;
-
-  ThemeMode themeMode = ThemeMode.light;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    showBorder = false;
-    super.dispose();
-  }
+  final bool showBorder = false;
 
   Widget _buildDrawerItem(BuildContext context, String title, GlobalKey key) {
     return ListTile(

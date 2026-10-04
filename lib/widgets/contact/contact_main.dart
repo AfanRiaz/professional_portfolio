@@ -410,35 +410,27 @@ class _SocialButton extends StatelessWidget {
   }
 }
 
-class _ContactForm extends StatefulWidget {
+class _ContactForm extends StatelessWidget {
   const _ContactForm();
 
   @override
-  State<_ContactForm> createState() => _ContactFormState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => ContactFormProvider(),
+      child: const _ContactFormContent(),
+    );
+  }
 }
 
-class _ContactFormState extends State<_ContactForm> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _messageController = TextEditingController();
+class _ContactFormContent extends StatelessWidget {
+  const _ContactFormContent();
 
-  bool _isSubmitting = false;
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _subjectController.dispose();
-    _messageController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleSubmit() async {
-    final name = _nameController.text.trim();
-    final email = _emailController.text.trim();
-    final subject = _subjectController.text.trim();
-    final message = _messageController.text.trim();
+  Future<void> _handleSubmit(BuildContext context) async {
+    final formProvider = context.read<ContactFormProvider>();
+    final name = formProvider.nameController.text.trim();
+    final email = formProvider.emailController.text.trim();
+    final subject = formProvider.subjectController.text.trim();
+    final message = formProvider.messageController.text.trim();
 
     if (name.isEmpty || email.isEmpty || subject.isEmpty || message.isEmpty) {
       showCenteredToast(
@@ -449,9 +441,7 @@ class _ContactFormState extends State<_ContactForm> {
       return;
     }
 
-    setState(() {
-      _isSubmitting = true;
-    });
+    formProvider.setSubmitting(true);
 
     try {
       // 1. Upload to Supabase with 10s timeout
@@ -474,17 +464,12 @@ class _ContactFormState extends State<_ContactForm> {
       final supabaseSuccess = results[0];
       final emailJsSuccess = results[1];
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
-      setState(() {
-        _isSubmitting = false;
-      });
+      formProvider.setSubmitting(false);
 
       if (supabaseSuccess || emailJsSuccess) {
-        _nameController.clear();
-        _emailController.clear();
-        _subjectController.clear();
-        _messageController.clear();
+        formProvider.clearFields();
 
         showCenteredToast(
           context,
@@ -499,10 +484,8 @@ class _ContactFormState extends State<_ContactForm> {
         );
       }
     } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _isSubmitting = false;
-      });
+      if (!context.mounted) return;
+      formProvider.setSubmitting(false);
       showCenteredToast(
         context,
         'An unexpected error occurred. Please try again.',
@@ -513,6 +496,9 @@ class _ContactFormState extends State<_ContactForm> {
 
   @override
   Widget build(BuildContext context) {
+    final formProvider = context.watch<ContactFormProvider>();
+    final isSubmitting = formProvider.isSubmitting;
+
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -554,13 +540,13 @@ class _ContactFormState extends State<_ContactForm> {
                 return Column(
                   children: [
                     _ContactTextField(
-                      controller: _nameController,
+                      controller: formProvider.nameController,
                       label: 'Name',
                       hint: 'Afan Riaz',
                     ),
                     const SizedBox(height: 22),
                     _ContactTextField(
-                      controller: _emailController,
+                      controller: formProvider.emailController,
                       label: 'Email',
                       hint: 'you@example.com',
                     ),
@@ -572,7 +558,7 @@ class _ContactFormState extends State<_ContactForm> {
                 children: [
                   Expanded(
                     child: _ContactTextField(
-                      controller: _nameController,
+                      controller: formProvider.nameController,
                       label: 'Name',
                       hint: 'Afan Riaz',
                     ),
@@ -580,7 +566,7 @@ class _ContactFormState extends State<_ContactForm> {
                   const SizedBox(width: 30),
                   Expanded(
                     child: _ContactTextField(
-                      controller: _emailController,
+                      controller: formProvider.emailController,
                       label: 'Email',
                       hint: 'you@example.com',
                     ),
@@ -593,7 +579,7 @@ class _ContactFormState extends State<_ContactForm> {
           const SizedBox(height: 25),
 
           _ContactTextField(
-            controller: _subjectController,
+            controller: formProvider.subjectController,
             label: 'Subject',
             hint: 'Project discussion',
           ),
@@ -601,7 +587,7 @@ class _ContactFormState extends State<_ContactForm> {
           const SizedBox(height: 25),
 
           _ContactTextField(
-            controller: _messageController,
+            controller: formProvider.messageController,
             label: 'Message',
             hint: 'Tell me about your project...',
             maxLines: 7,
@@ -613,7 +599,7 @@ class _ContactFormState extends State<_ContactForm> {
             width: double.infinity,
             height: 60,
             child: ElevatedButton(
-              onPressed: _isSubmitting ? null : _handleSubmit,
+              onPressed: isSubmitting ? null : () => _handleSubmit(context),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: colors.primary,
@@ -624,7 +610,7 @@ class _ContactFormState extends State<_ContactForm> {
                   borderRadius: BorderRadius.circular(22),
                 ),
               ),
-              child: _isSubmitting
+              child: isSubmitting
                   ? const SizedBox(
                       width: 24,
                       height: 24,

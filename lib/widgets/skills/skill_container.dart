@@ -198,45 +198,56 @@ class SkillContainer extends StatelessWidget {
   }
 }
 
-class AnimatedProgressBar extends StatefulWidget {
+class AnimatedProgressBar extends StatelessWidget {
   final double proficiency;
   final String id;
 
   const AnimatedProgressBar({
     super.key,
     required this.proficiency,
-    required this.id
+    required this.id,
   });
 
   @override
-  State<AnimatedProgressBar> createState() =>
-      _AnimatedProgressBarState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => ProgressBarProvider(),
+      child: _AnimatedProgressBarContent(
+        proficiency: proficiency,
+        id: id,
+      ),
+    );
+  }
 }
 
-class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
-  bool startAnimation = false;
+class _AnimatedProgressBarContent extends StatelessWidget {
+  final double proficiency;
+  final String id;
+
+  const _AnimatedProgressBarContent({
+    required this.proficiency,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key('progress-${widget.id}'),
+    final progressProvider = context.watch<ProgressBarProvider>();
+    final startAnimation = progressProvider.startAnimation;
 
+    return VisibilityDetector(
+      key: Key('progress-$id'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.1 && !startAnimation) {
-          setState(() {
-            startAnimation = true;
-          });
+          context.read<ProgressBarProvider>().setStartAnimation(true);
         }
       },
-
       child: TweenAnimationBuilder<double>(
         tween: Tween<double>(
           begin: 0,
-          end: startAnimation ? widget.proficiency / 100 : 0,
+          end: startAnimation ? proficiency / 100 : 0,
         ),
         duration: const Duration(seconds: 2),
         curve: Curves.easeOutCubic,
-
         builder: (context, value, child) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -249,12 +260,12 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                       colors: [
-                        Color.fromARGB(255, 90, 110, 160),  // #4658A0
-                        Color.fromARGB(255, 129, 204, 224), // #6678BB
+                        Color.fromARGB(255, 90, 110, 160),
+                        Color.fromARGB(255, 129, 204, 224),
                       ],
                     ),
                   ),
@@ -263,7 +274,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
             ),
           );
         },
-      )
+      ),
     );
   }
 }

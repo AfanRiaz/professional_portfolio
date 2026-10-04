@@ -9,37 +9,29 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'home_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Supabase.initialize(url: "https://rhmtxunnybyhqgqofudj.supabase.co",
-  publishableKey: "sb_publishable_A-hI0_zDYOZQUZef0dQFQA_bYamAvJX",
+  await Supabase.initialize(
+    url: "https://rhmtxunnybyhqgqofudj.supabase.co",
+    publishableKey: "sb_publishable_A-hI0_zDYOZQUZef0dQFQA_bYamAvJX",
   );
   print("Supabase initialized successfully!");
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => ThemeProvider(),
-      ),
-      ChangeNotifierProvider(create: (_) => HoverIconProvider(),
-      ),
-      ChangeNotifierProvider(create: (_) => ContainerProvider(),
-      ),
-      ChangeNotifierProvider(create: (_) => SkillContainerProvider(),
-      ),
-    ],
-        child: const MyApp(),
-    )
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => HoverIconProvider()),
+        ChangeNotifierProvider(create: (_) => ContainerProvider()),
+        ChangeNotifierProvider(create: (_) => SkillContainerProvider()),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
@@ -49,19 +41,14 @@ class _MyAppState extends State<MyApp> {
       theme: AfanAppTheme.lightTheme,
       darkTheme: AfanAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return HomeScreen();

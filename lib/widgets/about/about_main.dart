@@ -8,14 +8,9 @@ import '../../themes/custom_themes/text_gradient.dart';
 import '../components/reusable_container.dart';
 import '../components/reusable_my_info.dart';
 
-class AboutMain extends StatefulWidget {
+class AboutMain extends StatelessWidget {
   const AboutMain({super.key});
 
-  @override
-  State<AboutMain> createState() => _AboutMainState();
-}
-
-class _AboutMainState extends State<AboutMain> {
   @override
   Widget build(BuildContext context) {
     final List<StatsModel> statsData = [
@@ -129,9 +124,9 @@ class _AboutMainState extends State<AboutMain> {
           const SizedBox(height: 30),
           LayoutBuilder(builder: (context, constraints) {
             if (constraints.maxWidth >= 750) {
-              return rowWidget();
+              return rowWidget(context);
             } else {
-              return columnWidget();
+              return columnWidget(context);
             }
           }),
           const SizedBox(height: 30),
@@ -140,7 +135,7 @@ class _AboutMainState extends State<AboutMain> {
     );
   }
 
-  Widget rowWidget() {
+  Widget rowWidget(BuildContext context) {
     final List<StatsModel> techStackData = [
       const StatsModel(
         icon: Icon(
@@ -432,7 +427,7 @@ class _AboutMainState extends State<AboutMain> {
     );
   }
 
-  Widget columnWidget() {
+  Widget columnWidget(BuildContext context) {
     final List<StatsModel> techStackData = [
       const StatsModel(
         icon: Icon(

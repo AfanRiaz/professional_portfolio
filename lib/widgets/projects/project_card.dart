@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/project_provider.dart';
 import 'dialouge_box_container.dart';
 
 class ProjectData {
@@ -44,7 +46,7 @@ class ProjectData {
   }
 }
 
-class ProjectContainer extends StatefulWidget {
+class ProjectContainer extends StatelessWidget {
   final ProjectData project;
 
   const ProjectContainer({
@@ -53,11 +55,20 @@ class ProjectContainer extends StatefulWidget {
   });
 
   @override
-  State<ProjectContainer> createState() => _ProjectContainerState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => ProjectHoverProvider(),
+      child: _ProjectContainerContent(project: project),
+    );
+  }
 }
 
-class _ProjectContainerState extends State<ProjectContainer> {
-  bool isHovered = false;
+class _ProjectContainerContent extends StatelessWidget {
+  final ProjectData project;
+
+  const _ProjectContainerContent({
+    required this.project,
+  });
 
   Widget _buildCardImage(BuildContext context, String displayImage) {
     final theme = Theme.of(context);
@@ -126,14 +137,15 @@ class _ProjectContainerState extends State<ProjectContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final images = widget.project.screenshots.isNotEmpty
-        ? widget.project.screenshots
-        : [widget.project.image];
+    final images = project.screenshots.isNotEmpty
+        ? project.screenshots
+        : [project.image];
     final displayImage = images.first;
 
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final project = widget.project;
+    final hoverProvider = context.watch<ProjectHoverProvider>();
+    final isHovered = hoverProvider.isHovered;
 
     return GestureDetector(
       onTap: () async {
@@ -150,17 +162,13 @@ class _ProjectContainerState extends State<ProjectContainer> {
           },
         );
       },
-      onTapCancel: () => setState(() => isHovered = false),
+      onTapCancel: () => context.read<ProjectHoverProvider>().setHovered(false),
       child: MouseRegion(
         onEnter: (_) {
-          setState(() {
-            isHovered = true;
-          });
+          context.read<ProjectHoverProvider>().setHovered(true);
         },
         onExit: (_) {
-          setState(() {
-            isHovered = false;
-          });
+          context.read<ProjectHoverProvider>().setHovered(false);
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 350),
@@ -185,9 +193,7 @@ class _ProjectContainerState extends State<ProjectContainer> {
             borderRadius: BorderRadius.circular(30),
             child: Column(
               children: [
-                // ─────────────────────────────
                 // IMAGE SECTION
-                // ─────────────────────────────
                 AspectRatio(
                   aspectRatio: 16 / 10,
                   child: Stack(
@@ -313,9 +319,7 @@ class _ProjectContainerState extends State<ProjectContainer> {
                   ),
                 ),
 
-                // ─────────────────────────────
                 // INFORMATION SECTION
-                // ─────────────────────────────
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
                     26,

@@ -1,11 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../supabase/supabase_api.dart';
+import '../../provider/project_provider.dart';
 import '../components/toast_helper.dart';
 
-class DialogueBoxContainer extends StatefulWidget {
+class DialogueBoxContainer extends StatelessWidget {
   final String title;
   final List<String> images;
   final String actionText;
@@ -20,49 +21,55 @@ class DialogueBoxContainer extends StatefulWidget {
   });
 
   @override
-  State<DialogueBoxContainer> createState() =>
-      _DialogueBoxContainerState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => DialogueBoxProvider(),
+      child: _DialogueBoxContent(
+        title: title,
+        images: images,
+        actionText: actionText,
+        platform: platform,
+      ),
+    );
+  }
 }
 
-class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
+class _DialogueBoxContent extends StatelessWidget {
+  final String title;
+  final List<String> images;
+  final String actionText;
+  final String platform;
+
+  _DialogueBoxContent({
+    required this.title,
+    required this.images,
+    required this.actionText,
+    required this.platform,
+  });
+
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
-  int _currentIndex = 0;
-
   Future<void> _handleAction(BuildContext context) async {
-    final bool isWeb = widget.platform == "WEB" || widget.actionText == "View Live";
+    final bool isWeb = platform == "WEB" || actionText == "View Live";
 
     if (isWeb) {
       try {
         final url = Uri.parse('https://revora-web-ten.vercel.app/');
         final launched = await launchUrl(url, mode: LaunchMode.externalApplication);
         if (launched) {
-          if (!mounted) return;
+          if (!context.mounted) return;
           showCenteredToast(context, "Opening live preview...", isError: false);
         } else {
-          if (!mounted) return;
+          if (!context.mounted) return;
           showCenteredToast(context, "Cannot open live preview", isError: true);
         }
       } catch (e) {
-        if (!mounted) return;
+        if (!context.mounted) return;
         showCenteredToast(context, "Cannot open live preview", isError: true);
       }
     } else {
       showCenteredToast(context, "download unavailable");
-      // try {
-      //   final downloaded = await SupabaseApi().downloadResume();
-      //   if (downloaded) {
-      //     if (!mounted) return;
-      //     showCenteredToast(context, "Download started", isError: false);
-      //   } else {
-      //     if (!mounted) return;
-      //     showCenteredToast(context, "Cannot download", isError: true);
-      //   }
-      // } catch (e) {
-      //   if (!mounted) return;
-      //   showCenteredToast(context, "Cannot download", isError: true);
-      // }
     }
   }
 
@@ -71,8 +78,10 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
     final Size size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
+    final dialogueProvider = context.watch<DialogueBoxProvider>();
+    final currentIndex = dialogueProvider.currentIndex;
 
-    final bool isWeb = widget.platform == "WEB" || widget.actionText == "View Live";
+    final bool isWeb = platform == "WEB" || actionText == "View Live";
     final String buttonLabel = isWeb ? "View Live" : "Download";
 
     return Dialog(
@@ -123,18 +132,14 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                 ),
                 child: Column(
                   children: [
-                    // ─────────────────────────────
                     // HEADER
-                    // ─────────────────────────────
                     _buildHeader(
                       context,
-                      title: widget.title,
+                      title: title,
                       isMobile: isMobile,
                     ),
 
-                    // ─────────────────────────────
                     // CAROUSEL
-                    // ─────────────────────────────
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -153,7 +158,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                                   ),
                                   child: CarouselSlider.builder(
                                     carouselController: _carouselController,
-                                    itemCount: widget.images.length,
+                                    itemCount: images.length,
                                     itemBuilder: (
                                       context,
                                       index,
@@ -161,7 +166,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                                     ) {
                                       return _buildImage(
                                         context,
-                                        widget.images[index],
+                                        images[index],
                                       );
                                     },
                                     options: CarouselOptions(
@@ -169,22 +174,22 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                                       viewportFraction: 1.0,
                                       enlargeCenterPage: false,
                                       enableInfiniteScroll:
-                                          widget.images.length > 1,
+                                          images.length > 1,
                                       autoPlay: false,
                                       onPageChanged: (
                                         index,
                                         reason,
                                       ) {
-                                        setState(() {
-                                          _currentIndex = index;
-                                        });
+                                        context
+                                            .read<DialogueBoxProvider>()
+                                            .setCurrentIndex(index);
                                       },
                                     ),
                                   ),
                                 ),
 
                                 // LEFT BUTTON
-                                if (widget.images.length > 1)
+                                if (images.length > 1)
                                   Positioned(
                                     left: isMobile ? 8 : 16,
                                     child: _CarouselButton(
@@ -201,7 +206,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                                   ),
 
                                 // RIGHT BUTTON
-                                if (widget.images.length > 1)
+                                if (images.length > 1)
                                   Positioned(
                                     right: isMobile ? 8 : 16,
                                     child: _CarouselButton(
@@ -223,12 +228,11 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                       ),
                     ),
 
-                    // ─────────────────────────────
                     // FOOTER
-                    // ─────────────────────────────
                     _buildFooter(
                       context,
                       isMobile: isMobile,
+                      currentIndex: currentIndex,
                     ),
 
                     Padding(
@@ -265,10 +269,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
     );
   }
 
-  // ============================================================
   // HEADER
-  // ============================================================
-
   Widget _buildHeader(
     BuildContext context, {
     required String title,
@@ -286,7 +287,6 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
       ),
       child: Row(
         children: [
-          // TITLE
           Expanded(
             child: Text(
               title,
@@ -300,10 +300,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
               ),
             ),
           ),
-
           const SizedBox(width: 16),
-
-          // CLOSE BUTTON
           Material(
             color: colors.surfaceContainerHighest.withValues(
               alpha: 0.7,
@@ -338,10 +335,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
     );
   }
 
-  // ============================================================
   // IMAGE
-  // ============================================================
-
   Widget _buildImage(
     BuildContext context,
     String imagePath,
@@ -404,9 +398,9 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
                 Text(
                   'No Images Available',
                   style: theme.textTheme.titleMedium?.copyWith(
-                        color: colors.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: colors.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -416,13 +410,11 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
     );
   }
 
-  // ============================================================
   // FOOTER
-  // ============================================================
-
   Widget _buildFooter(
     BuildContext context, {
     required bool isMobile,
+    required int currentIndex,
   }) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
@@ -437,13 +429,13 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
       child: Column(
         children: [
           // DOT INDICATORS
-          if (widget.images.length > 1)
+          if (images.length > 1)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                widget.images.length,
+                images.length,
                 (index) {
-                  final bool active = index == _currentIndex;
+                  final bool active = index == currentIndex;
 
                   return AnimatedContainer(
                     duration: const Duration(
@@ -470,7 +462,7 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
 
           // PAGE NUMBER
           Text(
-            '${_currentIndex + 1} / ${widget.images.length}',
+            '${currentIndex + 1} / ${images.length}',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colors.primary,
               fontWeight: FontWeight.w600,
@@ -483,11 +475,8 @@ class _DialogueBoxContainerState extends State<DialogueBoxContainer> {
   }
 }
 
-// ================================================================
 // CAROUSEL BUTTON
-// ================================================================
-
-class _CarouselButton extends StatefulWidget {
+class _CarouselButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
 
@@ -497,26 +486,38 @@ class _CarouselButton extends StatefulWidget {
   });
 
   @override
-  State<_CarouselButton> createState() => _CarouselButtonState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => CarouselButtonHoverProvider(),
+      child: _CarouselButtonContent(
+        icon: icon,
+        onPressed: onPressed,
+      ),
+    );
+  }
 }
 
-class _CarouselButtonState extends State<_CarouselButton> {
-  bool isHovered = false;
+class _CarouselButtonContent extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _CarouselButtonContent({
+    required this.icon,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final hoverProvider = context.watch<CarouselButtonHoverProvider>();
+    final isHovered = hoverProvider.isHovered;
 
     return MouseRegion(
       onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
+        context.read<CarouselButtonHoverProvider>().setHovered(true);
       },
       onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
+        context.read<CarouselButtonHoverProvider>().setHovered(false);
       },
       child: AnimatedScale(
         scale: isHovered ? 1.08 : 1,
@@ -532,14 +533,14 @@ class _CarouselButtonState extends State<_CarouselButton> {
           shape: const CircleBorder(),
           child: InkWell(
             customBorder: const CircleBorder(),
-            onTap: widget.onPressed,
+            onTap: onPressed,
             child: SizedBox(
               width: 54,
               height: 54,
               child: Icon(
-                widget.icon,
-                size: 30,
+                icon,
                 color: colors.onSurface,
+                size: 32,
               ),
             ),
           ),

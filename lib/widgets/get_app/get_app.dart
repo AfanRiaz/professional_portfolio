@@ -369,7 +369,7 @@ class TechTimeline extends StatelessWidget {
 }
 
 
-class NewContainer extends StatefulWidget {
+class NewContainer extends StatelessWidget {
   final String text;
   final Widget? icon;
   final Color? borderColor;
@@ -384,13 +384,6 @@ class NewContainer extends StatefulWidget {
     this.backgroundColor,
     this.textColor,
   });
-
-  @override
-  State<NewContainer> createState() => _NewContainerState();
-}
-
-class _NewContainerState extends State<NewContainer> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -428,7 +421,7 @@ class _NewContainerState extends State<NewContainer> {
             borderRadius: BorderRadius.circular(30),
 
             border: Border.all(
-              color: widget.borderColor ??
+              color: borderColor ??
                   const Color(0xFF5267D5),
             ),
           ),
@@ -438,13 +431,13 @@ class _NewContainerState extends State<NewContainer> {
             children: [
 
               /// OPTIONAL ICON
-              if (widget.icon != null) ...[
+              if (icon != null) ...[
                 AnimatedScale(
                   scale: isHovered.isHovered ? 1.3 : 1.0,
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeOutCubic,
 
-                  child: widget.icon!,
+                  child: icon!,
                 ),
 
                 const SizedBox(width: 8),
@@ -452,10 +445,10 @@ class _NewContainerState extends State<NewContainer> {
 
               /// TEXT
               Text(
-                widget.text,
+                text,
                 style: TextStyle(
                   fontSize: 10,
-                  color: widget.textColor,
+                  color: textColor,
                   fontWeight: FontWeight.w900
                 ),
               ),
